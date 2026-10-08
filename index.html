@@ -466,18 +466,18 @@
       pointer-events: none;
     }
 
-    /* STRICT ZERO-OVERLAP 10-ITEMS PER A4 PAGE PRINT STYLES */
+    /* PERFECT 10-ITEMS PER A4 PAGE PRINT STYLES - ZERO OVERLAP */
     @media print {
       @page {
         size: A4 portrait;
-        margin: 6mm 8mm 6mm 8mm;
+        margin: 5mm 8mm 5mm 8mm;
       }
 
       html, body {
         background: #ffffff !important;
         color: #000000 !important;
         font-family: 'Malgun Gothic', '맑은 고딕', sans-serif !important;
-        font-size: 9pt !important;
+        font-size: 8.5pt !important;
         padding: 0 !important;
         margin: 0 !important;
         -webkit-print-color-adjust: exact;
@@ -499,19 +499,21 @@
         gap: 0 !important;
       }
 
-      /* STRICT SEQUENTIAL BLOCK LAYOUT WITH ZERO OVERLAPPING */
+      /* EXACT 27.2mm HEIGHT CALIBRATED FOR 10 CARDS PER A4 PAGE */
       .question-card {
         background: #ffffff !important;
         border: 1px solid #262626 !important;
         color: #000000 !important;
         box-shadow: none !important;
-        margin-bottom: 2mm !important;
-        padding: 5px 8px !important;
+        margin-bottom: 1.2mm !important;
+        padding: 4px 8px !important;
         border-radius: 4px !important;
         page-break-inside: avoid !important;
         break-inside: avoid !important;
-        display: block !important; /* Pure block layout prevents flex collisions */
+        height: 27.2mm !important; /* Perfect height to fit 10 items per A4 page */
         box-sizing: border-box !important;
+        overflow: hidden !important;
+        display: block !important;
         position: relative !important;
       }
 
@@ -523,12 +525,12 @@
       }
 
       .card-header {
-        margin-bottom: 3px !important;
+        margin-bottom: 1px !important;
         display: flex !important;
         align-items: center !important;
         justify-content: flex-start !important;
         gap: 6px !important;
-        height: auto !important;
+        height: 14px !important;
         position: relative !important;
       }
 
@@ -539,44 +541,47 @@
       }
 
       .qid-tag {
-        font-size: 8pt !important;
+        font-size: 7.8pt !important;
         font-weight: 700 !important;
-        padding: 1px 5px !important;
+        padding: 0px 4px !important;
         color: #ffffff !important;
         background: #000000 !important;
         border-radius: 3px !important;
-        line-height: 1.2 !important;
+        line-height: 1.1 !important;
       }
 
       .domain-tag {
-        font-size: 8pt !important;
+        font-size: 7.8pt !important;
         font-weight: 600 !important;
         color: #000000 !important;
         background: #f4f4f5 !important;
-        padding: 1px 5px !important;
+        padding: 0px 4px !important;
         border-radius: 3px !important;
         border: 1px solid #a1a1aa !important;
-        line-height: 1.2 !important;
+        line-height: 1.1 !important;
       }
 
-      /* QUESTION BODY - FULLY VISIBLE SEQUENTIAL BLOCK */
+      /* QUESTION BODY - CLEAR NO OVERLAP */
       .question-body {
         color: #000000 !important;
-        font-size: 8.8pt !important;
+        font-size: 8.5pt !important;
         font-weight: 700 !important;
         margin-top: 0 !important;
-        margin-bottom: 3px !important;
-        line-height: 1.3 !important;
+        margin-bottom: 1px !important;
+        line-height: 1.2 !important;
         display: block !important;
         position: relative !important;
         clear: both !important;
         word-break: keep-all !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
       }
 
       .keyword-box {
-        padding: 2px 6px !important;
-        margin-bottom: 3px !important;
-        font-size: 8.2pt !important;
+        padding: 1px 5px !important;
+        margin-bottom: 1px !important;
+        font-size: 8pt !important;
         background: #f4f4f5 !important;
         border-left: 3px solid #000000 !important;
         border-top: none !important;
@@ -585,6 +590,9 @@
         border-radius: 0 !important;
         display: block !important;
         clear: both !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
       }
 
       .keyword-label {
@@ -600,26 +608,29 @@
       .answer-box {
         background: #fafafa !important;
         border: 1px solid #52525b !important;
-        padding: 3px 6px !important;
+        padding: 2px 5px !important;
         border-radius: 3px !important;
         display: block !important;
         clear: both !important;
       }
 
       .answer-content {
-        color: #000000 !important; /* Clean Black Text for B&W Printing */
-        font-size: 8.5pt !important;
+        color: #000000 !important;
+        font-size: 8.2pt !important;
         font-weight: 400 !important;
-        line-height: 1.3 !important;
+        line-height: 1.2 !important;
         display: block !important;
         word-break: keep-all !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
       }
 
       .answer-content mark {
-        background: #e4e4e7 !important; /* Grayscale Light Gray Badge for B&W Print */
+        background: #e4e4e7 !important;
         color: #000000 !important;
         font-weight: 700 !important;
-        padding: 1px 4px !important;
+        padding: 0 3px !important;
         border-radius: 2px !important;
         border: 1px solid #71717a !important;
         box-shadow: none !important;
@@ -642,7 +653,7 @@
     <div class="header-container">
       <div class="brand">
         <h1>🎓 2027 전문상담 & 교육학 200대 키워드 마스터</h1>
-        <span class="subtitle">🖨️ A4 1장당 10개 (글자 겹침 완벽 방지)</span>
+        <span class="subtitle">🖨️ A4 1장당 딱 10개 정밀 정렬 모드</span>
       </div>
       <div class="header-actions">
         <button class="btn btn-fire" id="topPickFilterBtn" title="2027년 출제 1순위 핵심 55문항만 보기">
@@ -654,8 +665,8 @@
         <button class="btn" id="filterStarBtn" title="북마크한 문항만 보기">
           ⭐ 오답노트 (<span id="starCount">0</span>)
         </button>
-        <button class="btn btn-primary" onclick="window.print()" title="A4 용지 흑백 인쇄/PDF 저장 (1장당 10문항 선명 정렬)">
-          🖨️ A4 흑백 PDF 인쇄 (1장당 10문항)
+        <button class="btn btn-primary" onclick="window.print()" title="A4 용지 흑백 인쇄/PDF 저장 (1장당 딱 10문항 정밀 출력)">
+          🖨️ A4 흑백 PDF 인쇄 (1장당 딱 10문항)
         </button>
       </div>
     </div>
@@ -711,7 +722,7 @@
     <main class="questions-container">
       <div class="stats-bar">
         <div>현재 표시된 문항: <strong id="visibleCount" style="color: #ffee58;">55</strong>개</div>
-        <div style="font-size: 0.85rem; color: #a1a1aa;">🖨️ 인쇄 시 글자가 서로 겹치지 않도록 직렬 블록 레이아웃이 완벽 적용되었습니다!</div>
+        <div style="font-size: 0.85rem; color: #a1a1aa;">🖨️ A4 1장당 정확하게 10문항씩(1~10, 11~20...) 나누어 출력됩니다!</div>
       </div>
 
       <div id="questionsList"></div>
