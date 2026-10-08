@@ -466,7 +466,7 @@
       pointer-events: none;
     }
 
-    /* HIGH READABILITY B&W PRINT STYLES - 10 ITEMS PER A4 PAGE */
+    /* STRICT ZERO-OVERLAP 10-ITEMS PER A4 PAGE PRINT STYLES */
     @media print {
       @page {
         size: A4 portrait;
@@ -499,7 +499,7 @@
         gap: 0 !important;
       }
 
-      /* HIGH READABILITY UN-CRAMPED CARD (EXACT 10 PER PAGE) */
+      /* STRICT SEQUENTIAL BLOCK LAYOUT WITH ZERO OVERLAPPING */
       .question-card {
         background: #ffffff !important;
         border: 1px solid #262626 !important;
@@ -510,12 +510,9 @@
         border-radius: 4px !important;
         page-break-inside: avoid !important;
         break-inside: avoid !important;
-        height: 26.5mm !important; /* Calibrated height for 10 items per A4 page */
+        display: block !important; /* Pure block layout prevents flex collisions */
         box-sizing: border-box !important;
-        overflow: hidden !important;
-        display: flex !important;
-        flex-direction: column !important;
-        justify-content: space-between !important;
+        position: relative !important;
       }
 
       /* HARD PAGE BREAK AFTER EVERY 10th CARD */
@@ -526,11 +523,13 @@
       }
 
       .card-header {
-        margin-bottom: 1px !important;
+        margin-bottom: 3px !important;
         display: flex !important;
         align-items: center !important;
         justify-content: flex-start !important;
         gap: 6px !important;
+        height: auto !important;
+        position: relative !important;
       }
 
       .card-meta {
@@ -546,6 +545,7 @@
         color: #ffffff !important;
         background: #000000 !important;
         border-radius: 3px !important;
+        line-height: 1.2 !important;
       }
 
       .domain-tag {
@@ -556,31 +556,35 @@
         padding: 1px 5px !important;
         border-radius: 3px !important;
         border: 1px solid #a1a1aa !important;
+        line-height: 1.2 !important;
       }
 
-      /* FULLY VISIBLE MULTI-LINE QUESTION TEXT */
+      /* QUESTION BODY - FULLY VISIBLE SEQUENTIAL BLOCK */
       .question-body {
         color: #000000 !important;
-        font-size: 9.2pt !important;
+        font-size: 8.8pt !important;
         font-weight: 700 !important;
-        margin-bottom: 2px !important;
-        line-height: 1.25 !important;
-        display: -webkit-box !important;
-        -webkit-line-clamp: 2 !important;
-        -webkit-box-orient: vertical !important;
-        overflow: hidden !important;
+        margin-top: 0 !important;
+        margin-bottom: 3px !important;
+        line-height: 1.3 !important;
+        display: block !important;
+        position: relative !important;
+        clear: both !important;
+        word-break: keep-all !important;
       }
 
       .keyword-box {
         padding: 2px 6px !important;
-        margin-bottom: 2px !important;
-        font-size: 8.5pt !important;
+        margin-bottom: 3px !important;
+        font-size: 8.2pt !important;
         background: #f4f4f5 !important;
         border-left: 3px solid #000000 !important;
         border-top: none !important;
         border-right: none !important;
         border-bottom: none !important;
         border-radius: 0 !important;
+        display: block !important;
+        clear: both !important;
       }
 
       .keyword-label {
@@ -596,19 +600,19 @@
       .answer-box {
         background: #fafafa !important;
         border: 1px solid #52525b !important;
-        padding: 2px 6px !important;
+        padding: 3px 6px !important;
         border-radius: 3px !important;
+        display: block !important;
+        clear: both !important;
       }
 
       .answer-content {
         color: #000000 !important; /* Clean Black Text for B&W Printing */
         font-size: 8.5pt !important;
         font-weight: 400 !important;
-        line-height: 1.25 !important;
-        display: -webkit-box !important;
-        -webkit-line-clamp: 2 !important;
-        -webkit-box-orient: vertical !important;
-        overflow: hidden !important;
+        line-height: 1.3 !important;
+        display: block !important;
+        word-break: keep-all !important;
       }
 
       .answer-content mark {
@@ -638,7 +642,7 @@
     <div class="header-container">
       <div class="brand">
         <h1>🎓 2027 전문상담 & 교육학 200대 키워드 마스터</h1>
-        <span class="subtitle">🖨️ A4 1장당 10개 (영어 풀네임 삭제 적용)</span>
+        <span class="subtitle">🖨️ A4 1장당 10개 (글자 겹침 완벽 방지)</span>
       </div>
       <div class="header-actions">
         <button class="btn btn-fire" id="topPickFilterBtn" title="2027년 출제 1순위 핵심 55문항만 보기">
@@ -707,7 +711,7 @@
     <main class="questions-container">
       <div class="stats-bar">
         <div>현재 표시된 문항: <strong id="visibleCount" style="color: #ffee58;">55</strong>개</div>
-        <div style="font-size: 0.85rem; color: #a1a1aa;">🖨️ 불필요한 영어 풀네임이 전면 삭제되어 한글 명칭 위주로 깔끔하게 정리되었습니다!</div>
+        <div style="font-size: 0.85rem; color: #a1a1aa;">🖨️ 인쇄 시 글자가 서로 겹치지 않도록 직렬 블록 레이아웃이 완벽 적용되었습니다!</div>
       </div>
 
       <div id="questionsList"></div>
