@@ -1049,6 +1049,143 @@ body.blind-mode .kw-tag.revealed {
   font-size: 0.88rem;
 }
 
+
+/* Interactive Type-Along Mode Styles */
+.line-block {
+  margin-bottom: 12px;
+}
+.line-block:last-child {
+  margin-bottom: 2px;
+}
+.type-input-wrap {
+  position: relative;
+  margin-top: 6px;
+  display: flex;
+  align-items: center;
+}
+.line-type-input {
+  width: 100%;
+  background: #141e30;
+  border: 1px solid #2d3b55;
+  border-radius: 6px;
+  padding: 8px 105px 8px 12px;
+  font-size: 0.88rem;
+  color: #f1f5f9;
+  font-family: 'Pretendard', sans-serif;
+  outline: none;
+  transition: all 0.2s ease;
+  line-height: 1.5;
+}
+.line-type-input::placeholder {
+  color: #64748b;
+  font-size: 0.80rem;
+}
+.line-type-input:focus {
+  border-color: #38bdf8;
+  box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.25);
+  background: #0d1524;
+}
+.line-type-input.match-exact {
+  border-color: #10b981 !important;
+  background: rgba(16, 185, 129, 0.12) !important;
+  color: #6ee7b7 !important;
+  font-weight: 500;
+  box-shadow: 0 0 0 1px rgba(16, 185, 129, 0.4);
+}
+.line-type-input.typing-active {
+  border-color: #38bdf8;
+  background: rgba(56, 189, 248, 0.05);
+}
+.pedagogy-textarea {
+  min-height: 72px;
+  resize: vertical;
+  padding-right: 90px;
+}
+
+.line-status-badge {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: #94a3b8;
+  pointer-events: none;
+  font-family: 'JetBrains Mono', monospace;
+  background: rgba(15, 23, 42, 0.7);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+.line-status-badge.exact {
+  color: #34d399;
+  font-weight: 700;
+  background: rgba(16, 185, 129, 0.2);
+}
+
+.type-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+.type-progress-info {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.78rem;
+  color: #94a3b8;
+}
+.type-prog-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #64748b;
+  display: inline-block;
+}
+.type-progress-info.all-matched .type-prog-dot {
+  background: #10b981;
+  box-shadow: 0 0 8px #10b981;
+}
+.type-progress-info.all-matched .type-prog-text {
+  color: #34d399;
+  font-weight: 700;
+}
+
+.type-btn-group {
+  display: flex;
+  gap: 6px;
+}
+.type-tool-btn {
+  background: #1e293b;
+  border: 1px solid #334155;
+  color: #cbd5e1;
+  font-size: 0.74rem;
+  padding: 4px 9px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: 'Pretendard', sans-serif;
+}
+.type-tool-btn:hover {
+  background: #334155;
+  color: #fff;
+  border-color: #64748b;
+}
+
+.blinded-text {
+  filter: blur(5px) !important;
+  opacity: 0.2 !important;
+  user-select: none !important;
+  transition: filter 0.25s ease, opacity 0.25s ease !important;
+  cursor: pointer;
+}
+.blinded-text:hover {
+  filter: none !important;
+  opacity: 1 !important;
+}
+
 </style>
 </head>
 <body>
@@ -1165,14 +1302,15 @@ body.blind-mode .kw-tag.revealed {
     <input type="text" id="search-input" placeholder="이론명, 학자명, 키워드 실시간 검색..." oninput="handleSearch()">
   </div>
 
-  <div class="tool-group" id="top55-filters" style="display:flex; flex-wrap:wrap; gap:6px;">
+  <div class="tool-group" id="top55-filters" style="display:flex; flex-wrap:wrap; gap:6px; align-items:center;">
         <button class="tool-btn active-toggle" onclick="filterTop55('all', this)">🔥 전체 (75선)</button>
-        <button class="tool-btn" onclick="filterTop55('counseling', this)">🧠 전공 55선 (4줄 절대공식)</button>
+        <button class="tool-btn" onclick="filterTop55('counseling', this)">🧠 전공 55선 (4줄 따라치기)</button>
         <button class="tool-btn" onclick="filterTop55('part1', this)">1. 이상심리 (01~18)</button>
         <button class="tool-btn" onclick="filterTop55('part2', this)">2. 상담이론 (19~35)</button>
         <button class="tool-btn" onclick="filterTop55('part3', this)">3. 가족·집단 (36~45)</button>
         <button class="tool-btn" onclick="filterTop55('part4', this)">4. 심리평가 (46~55)</button>
         <button class="tool-btn" onclick="filterTop55('pedagogy', this)">📖 교육학 20선</button>
+        <button class="tool-btn" style="background:#3b1e32; border-color:#f43f5e; color:#fca5a5; margin-left:auto;" onclick="toggleAllTop55Blind(this)">👁️ 전체 정답 가리기</button>
       </div>
 </div>
 
@@ -1349,6 +1487,177 @@ function toggleBlindMode() {
 }
 
 // Render Top55 Cards
+// Interactive Typing Comparison & Normalization
+function normalizeCompare(text) {
+  if (!text) return '';
+  return text
+    .replace(/^정답\s*:\s*/g, '')
+    .replace(/[·•,\.\/\-\s\(\)\[\]'"]/g, '')
+    .trim()
+    .toLowerCase();
+}
+
+function getLineMatch(typed, target) {
+  const normTyped = normalizeCompare(typed);
+  const normTarget = normalizeCompare(target);
+  if (!normTyped) return { match: false, exact: false, rate: 0 };
+  if (normTyped === normTarget) return { match: true, exact: true, rate: 100 };
+  
+  if (normTarget.startsWith(normTyped)) {
+    const rate = Math.min(99, Math.round((normTyped.length / normTarget.length) * 100));
+    return { match: false, exact: false, rate: rate };
+  }
+
+  let matchedChars = 0;
+  for (let i = 0; i < Math.min(normTyped.length, normTarget.length); i++) {
+    if (normTyped[i] === normTarget[i]) matchedChars++;
+  }
+  const rate = Math.round((matchedChars / normTarget.length) * 100);
+  return { match: false, exact: false, rate: rate };
+}
+
+function handleTop55Input(code, lineNum) {
+  const inputEl = document.getElementById('type-' + code + '-' + lineNum);
+  const targetEl = document.getElementById('target-' + code + '-' + lineNum);
+  const badgeEl = document.getElementById('badge-' + code + '-' + lineNum);
+  if (!inputEl || !targetEl) return;
+
+  const typed = inputEl.value;
+  const target = targetEl.innerText || targetEl.textContent;
+  const res = getLineMatch(typed, target);
+
+  // Persistence
+  localStorage.setItem('top55_type_' + code + '_' + lineNum, typed);
+
+  // Visual styling
+  inputEl.classList.remove('match-exact', 'typing-active');
+  if (res.exact) {
+    inputEl.classList.add('match-exact');
+    if (badgeEl) {
+      badgeEl.innerText = '✓ 100% 일치';
+      badgeEl.className = 'line-status-badge exact';
+    }
+  } else if (typed.trim().length > 0) {
+    inputEl.classList.add('typing-active');
+    if (badgeEl) {
+      badgeEl.innerText = typed.length + '자 (' + res.rate + '%)';
+      badgeEl.className = 'line-status-badge';
+    }
+  } else {
+    if (badgeEl) {
+      badgeEl.innerText = '';
+      badgeEl.className = 'line-status-badge';
+    }
+  }
+
+  // Update card progress status
+  updateTop55CardProgress(code);
+}
+
+function updateTop55CardProgress(code) {
+  const card = document.getElementById('top55-card-' + code);
+  const progBox = document.getElementById('prog-' + code);
+  const progText = document.getElementById('prog-text-' + code);
+  if (!card || !progBox || !progText) return;
+
+  const isCounseling = code.startsWith('C');
+  const totalLines = isCounseling ? 4 : 1;
+  let matchedCount = 0;
+  let hasInput = false;
+
+  for (let i = 1; i <= totalLines; i++) {
+    const inputEl = document.getElementById('type-' + code + '-' + i);
+    const targetEl = document.getElementById('target-' + code + '-' + i);
+    if (inputEl && targetEl) {
+      if (inputEl.value.trim().length > 0) hasInput = true;
+      const res = getLineMatch(inputEl.value, targetEl.innerText || targetEl.textContent);
+      if (res.exact) matchedCount++;
+    }
+  }
+
+  if (matchedCount === totalLines) {
+    progBox.classList.add('all-matched');
+    progText.innerText = '🎉 ' + (isCounseling ? '4줄' : '정답') + ' 100% 완벽 암기 일치!';
+    // Auto check memorized
+    const chk = card.querySelector('.memorize-chk input');
+    if (chk && !chk.checked) {
+      chk.checked = true;
+      toggleMemorized(code, true);
+    }
+  } else if (hasInput) {
+    progBox.classList.remove('all-matched');
+    progText.innerText = '따라치기 진행 중 (' + matchedCount + '/' + totalLines + '줄 일치)';
+  } else {
+    progBox.classList.remove('all-matched');
+    progText.innerText = '따라치기 대기 (0/' + totalLines + '줄)';
+  }
+}
+
+function handleTop55KeyDown(e, code, lineNum, totalLines) {
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    if (lineNum < totalLines) {
+      const nextInput = document.getElementById('type-' + code + '-' + (lineNum + 1));
+      if (nextInput) nextInput.focus();
+    } else {
+      updateTop55CardProgress(code);
+    }
+  } else if (e.key === 'ArrowUp' && (e.target.selectionStart === 0 || e.target.value.length === 0)) {
+    if (lineNum > 1) {
+      e.preventDefault();
+      const prevInput = document.getElementById('type-' + code + '-' + (lineNum - 1));
+      if (prevInput) prevInput.focus();
+    }
+  } else if (e.key === 'ArrowDown' && (e.target.selectionStart === e.target.value.length)) {
+    if (lineNum < totalLines) {
+      e.preventDefault();
+      const nextInput = document.getElementById('type-' + code + '-' + (lineNum + 1));
+      if (nextInput) nextInput.focus();
+    }
+  }
+}
+
+function toggleHideCardAnswer(code) {
+  const targets = document.querySelectorAll('.target-text-' + code);
+  const btn = document.getElementById('hide-btn-' + code);
+  if (!targets.length) return;
+  const isBlinded = targets[0].classList.contains('blinded-text');
+  targets.forEach(t => t.classList.toggle('blinded-text', !isBlinded));
+  if (btn) {
+    btn.innerText = !isBlinded ? '👁️ 정답 보이기' : '👁️ 정답 가리기';
+  }
+}
+
+let globalBlindState = false;
+function toggleAllTop55Blind(btn) {
+  globalBlindState = !globalBlindState;
+  document.querySelectorAll('.line-text').forEach(t => {
+    t.classList.toggle('blinded-text', globalBlindState);
+  });
+  if (btn) {
+    btn.innerText = globalBlindState ? '👁️ 전체 정답 보이기' : '👁️ 전체 정답 가리기';
+  }
+}
+
+function resetTop55Typing(code, totalLines) {
+  for (let i = 1; i <= totalLines; i++) {
+    localStorage.removeItem('top55_type_' + code + '_' + i);
+    const inputEl = document.getElementById('type-' + code + '-' + i);
+    if (inputEl) {
+      inputEl.value = '';
+      inputEl.classList.remove('match-exact', 'typing-active');
+    }
+    const badgeEl = document.getElementById('badge-' + code + '-' + i);
+    if (badgeEl) {
+      badgeEl.innerText = '';
+      badgeEl.className = 'line-status-badge';
+    }
+  }
+  updateTop55CardProgress(code);
+  const firstInput = document.getElementById('type-' + code + '-1');
+  if (firstInput) firstInput.focus();
+}
+
 function renderTop55() {
   const container = document.getElementById('top55-grid');
   if (!container) return;
@@ -1381,6 +1690,114 @@ function renderTop55() {
 
     const kwTags = item.keywords.map(kw => '<span class="kw-tag" onclick="this.classList.toggle(\'revealed\')">' + kw + '</span>').join('');
 
+    let answerHtml = '';
+    if (item.type === 'counseling') {
+      answerHtml = 
+        '<div class="compact-answer-box" id="ansbox-' + item.code + '">' +
+          '<div class="four-line-answer">' +
+            // Line 1
+            '<div class="line-block">' +
+              '<div class="line-row">' +
+                '<span class="line-tag tag-l1">1줄 (본질)</span>' +
+                '<span class="line-text target-text-' + item.code + '" id="target-' + item.code + '-1">' + item.l1 + '</span>' +
+              '</div>' +
+              '<div class="type-input-wrap">' +
+                '<input type="text" class="line-type-input" id="type-' + item.code + '-1" ' +
+                       'placeholder="⌨️ 1줄 따라치기 (입력 후 Enter로 다음 줄 이동)" ' +
+                       'autocomplete="off" spellcheck="false" ' +
+                       'oninput="handleTop55Input(\'' + item.code + '\', 1)" ' +
+                       'onkeydown="handleTop55KeyDown(event, \'' + item.code + '\', 1, 4)">' +
+                '<span class="line-status-badge" id="badge-' + item.code + '-1"></span>' +
+              '</div>' +
+            '</div>' +
+            // Line 2
+            '<div class="line-block">' +
+              '<div class="line-row">' +
+                '<span class="line-tag tag-l2">2줄 (메커니즘)</span>' +
+                '<span class="line-text target-text-' + item.code + '" id="target-' + item.code + '-2">' + item.l2 + '</span>' +
+              '</div>' +
+              '<div class="type-input-wrap">' +
+                '<input type="text" class="line-type-input" id="type-' + item.code + '-2" ' +
+                       'placeholder="⌨️ 2줄 따라치기 (입력 후 Enter로 다음 줄 이동)" ' +
+                       'autocomplete="off" spellcheck="false" ' +
+                       'oninput="handleTop55Input(\'' + item.code + '\', 2)" ' +
+                       'onkeydown="handleTop55KeyDown(event, \'' + item.code + '\', 2, 4)">' +
+                '<span class="line-status-badge" id="badge-' + item.code + '-2"></span>' +
+              '</div>' +
+            '</div>' +
+            // Line 3
+            '<div class="line-block">' +
+              '<div class="line-row">' +
+                '<span class="line-tag tag-l3">3줄 (감별)</span>' +
+                '<span class="line-text target-text-' + item.code + '" id="target-' + item.code + '-3">' + item.l3 + '</span>' +
+              '</div>' +
+              '<div class="type-input-wrap">' +
+                '<input type="text" class="line-type-input" id="type-' + item.code + '-3" ' +
+                       'placeholder="⌨️ 3줄 따라치기 (입력 후 Enter로 다음 줄 이동)" ' +
+                       'autocomplete="off" spellcheck="false" ' +
+                       'oninput="handleTop55Input(\'' + item.code + '\', 3)" ' +
+                       'onkeydown="handleTop55KeyDown(event, \'' + item.code + '\', 3, 4)">' +
+                '<span class="line-status-badge" id="badge-' + item.code + '-3"></span>' +
+              '</div>' +
+            '</div>' +
+            // Line 4
+            '<div class="line-block">' +
+              '<div class="line-row">' +
+                '<span class="line-tag tag-l4">4줄 (해결책)</span>' +
+                '<span class="line-text target-text-' + item.code + '" id="target-' + item.code + '-4">' + item.l4 + '</span>' +
+              '</div>' +
+              '<div class="type-input-wrap">' +
+                '<input type="text" class="line-type-input" id="type-' + item.code + '-4" ' +
+                       'placeholder="⌨️ 4줄 따라치기 (입력 후 Enter 완료)" ' +
+                       'autocomplete="off" spellcheck="false" ' +
+                       'oninput="handleTop55Input(\'' + item.code + '\', 4)" ' +
+                       'onkeydown="handleTop55KeyDown(event, \'' + item.code + '\', 4, 4)">' +
+                '<span class="line-status-badge" id="badge-' + item.code + '-4"></span>' +
+              '</div>' +
+            '</div>' +
+          '</div>' +
+          '<div class="type-toolbar">' +
+            '<div class="type-progress-info" id="prog-' + item.code + '">' +
+              '<span class="type-prog-dot"></span>' +
+              '<span class="type-prog-text" id="prog-text-' + item.code + '">따라치기 대기 (0/4줄)</span>' +
+            '</div>' +
+            '<div class="type-btn-group">' +
+              '<button type="button" class="type-tool-btn" id="hide-btn-' + item.code + '" onclick="toggleHideCardAnswer(\'' + item.code + '\')">👁️ 정답 가리기</button>' +
+              '<button type="button" class="type-tool-btn" onclick="resetTop55Typing(\'' + item.code + '\', 4)">🔄 다시 치기</button>' +
+            '</div>' +
+          '</div>' +
+        '</div>';
+    } else {
+      // Pedagogy item
+      const cleanAnswer = item.answer.replace(/^정답\s*:\s*/, '');
+      answerHtml = 
+        '<div class="compact-answer-box" id="ansbox-' + item.code + '">' +
+          '<div class="line-block">' +
+            '<div class="line-row" style="margin-bottom:8px;">' +
+              '<span class="line-tag tag-l1">모범답안</span>' +
+              '<span class="line-text target-text-' + item.code + '" id="target-' + item.code + '-1">' + cleanAnswer + '</span>' +
+            '</div>' +
+            '<div class="type-input-wrap">' +
+              '<textarea class="line-type-input pedagogy-textarea" id="type-' + item.code + '-1" ' +
+                        'placeholder="⌨️ 위 정답을 키보드로 바로 따라 쳐보세요..." rows="3" ' +
+                        'autocomplete="off" spellcheck="false" ' +
+                        'oninput="handleTop55Input(\'' + item.code + '\', 1)"></textarea>' +
+              '<span class="line-status-badge" id="badge-' + item.code + '-1" style="top:18px;"></span>' +
+            '</div>' +
+          '</div>' +
+          '<div class="type-toolbar">' +
+            '<div class="type-progress-info" id="prog-' + item.code + '">' +
+              '<span class="type-prog-dot"></span>' +
+              '<span class="type-prog-text" id="prog-text-' + item.code + '">따라치기 대기 (0/1줄)</span>' +
+            '</div>' +
+            '<div class="type-btn-group">' +
+              '<button type="button" class="type-tool-btn" id="hide-btn-' + item.code + '" onclick="toggleHideCardAnswer(\'' + item.code + '\')">👁️ 정답 가리기</button>' +
+              '<button type="button" class="type-tool-btn" onclick="resetTop55Typing(\'' + item.code + '\', 1)">🔄 다시 치기</button>' +
+            '</div>' +
+          '</div>' +
+        '</div>';
+    }
+
     card.innerHTML = 
       '<div class="card-top">' +
         '<div class="badge-group">' +
@@ -1394,10 +1811,27 @@ function renderTop55() {
       '</div>' +
       '<div class="card-question">' + item.question + '</div>' +
       '<div class="keyword-tags">' + kwTags + '</div>' +
-      '<div class="compact-answer-box">' + item.answer + '</div>';
+      answerHtml;
 
     container.appendChild(card);
+
+    // Restore saved input and calculate progress
+    const totalLines = (item.type === 'counseling') ? 4 : 1;
+    for (let l = 1; l <= totalLines; l++) {
+      const saved = localStorage.getItem('top55_type_' + item.code + '_' + l);
+      if (saved) {
+        const inputEl = document.getElementById('type-' + item.code + '-' + l);
+        if (inputEl) {
+          inputEl.value = saved;
+          handleTop55Input(item.code, l);
+        }
+      }
+    }
   });
+
+  if (globalBlindState) {
+    document.querySelectorAll('.line-text').forEach(t => t.classList.add('blinded-text'));
+  }
 }
 
 function filterTop55(cat, btn) {
