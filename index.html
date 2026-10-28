@@ -3,6 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+
 <title>2027 KICE 임용고시 합격 마스터: 교육학 & 전공상담 풀세트</title>
 <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
@@ -1608,8 +1612,9 @@ body.blind-mode .kw-tag.revealed {
         <h3>🎓 1교시 교육학 논술 모의고사 [총점 20점 만점 / 16개 세부 소문항 규격]</h3>
         <p>2026 소진 이론 완전 배제! 2027 0순위 4대 영역(교육과정·교육방법·교육평가·교육행정) 16개 세부 발문 실전 시험지</p>
       </div>
-      <div style="font-size: 0.85rem; color: var(--sky); font-weight: 700;">
-        시험 시간: 60분 (B4 답안지 1페이지)
+      <div style="display:flex; flex-direction:column; align-items:flex-end; gap:6px;">
+        <span style="font-size: 0.85rem; color: var(--sky); font-weight: 700;">시험 시간: 60분 (B4 답안지 1페이지)</span>
+        <button type="button" class="tool-btn" onclick="toggleAllPedagogyBlind(this)" style="padding:3px 10px; font-size:0.78rem; background:#1e293b; border-color:#38bdf8; color:#38bdf8;">👁️ 세부 질문 전체 열기</button>
       </div>
     </div>
 
@@ -2198,6 +2203,38 @@ function updateProgress() {
 }
 
 // Render Pedagogy Essay
+
+let pedagogyQuestionsBlinded = true;
+
+function togglePedagogyBlind(domainId) {
+  const el = document.getElementById('ped-subq-' + domainId);
+  const kw = document.getElementById('ped-kw-' + domainId);
+  const ph = document.getElementById('ped-blind-placeholder-' + domainId);
+  const btn = document.getElementById('ped-blind-btn-' + domainId);
+  if (!el) return;
+  const isHidden = (el.style.display === 'none');
+  el.style.display = isHidden ? 'block' : 'none';
+  if (kw) kw.style.display = isHidden ? 'flex' : 'none';
+  if (ph) ph.style.display = isHidden ? 'none' : 'block';
+  if (btn) btn.innerText = isHidden ? '👁️ 질문 가리기' : '👁️ 세부 질문 4개 열기';
+}
+
+function toggleAllPedagogyBlind(btn) {
+  pedagogyQuestionsBlinded = !pedagogyQuestionsBlinded;
+  const domains = ['d1', 'd2', 'd3', 'd4'];
+  domains.forEach(id => {
+    const el = document.getElementById('ped-subq-' + id);
+    const kw = document.getElementById('ped-kw-' + id);
+    const ph = document.getElementById('ped-blind-placeholder-' + id);
+    const b = document.getElementById('ped-blind-btn-' + id);
+    if (el) el.style.display = pedagogyQuestionsBlinded ? 'none' : 'block';
+    if (kw) kw.style.display = pedagogyQuestionsBlinded ? 'none' : 'flex';
+    if (ph) ph.style.display = pedagogyQuestionsBlinded ? 'block' : 'none';
+    if (b) b.innerText = pedagogyQuestionsBlinded ? '👁️ 세부 질문 4개 열기' : '👁️ 질문 가리기';
+  });
+  if (btn) btn.innerText = pedagogyQuestionsBlinded ? '👁️ 세부 질문 전체 열기' : '👁️ 세부 질문 전체 가리기';
+}
+
 function renderPedagogy() {
   const ped = rawData.pedagogy;
   if (!ped || !ped.domains) return;
@@ -2259,11 +2296,19 @@ function renderPedagogy() {
                 '<button class="vip-unlock-action-btn" onclick="openLoginModal()" style="font-size:0.78rem; padding:5px 12px;">🔑 질문 잠금 해제하기</button>' +
               '</div>' +
             '</div>' :
-            '<div style="background:#090d16; border:1px solid #1e293b; border-radius:8px; padding:10px 14px; font-size:0.84rem; color:#e2e8f0; max-height:260px; overflow-y:auto;">' +
-              '<strong style="color:var(--sky); font-size:0.82rem;">[세부 질문 4개]</strong>' +
-              '<ol style="margin-left:16px; margin-top:4px; line-height:1.5;">' + subQList + '</ol>' +
-            '</div>' +
-            '<div class="keyword-tags" style="margin-top:4px;">' + kwBadges + '</div>'
+            '<div style="background:#090d16; border:1px solid #1e293b; border-radius:8px; padding:10px 14px;">' +
+              '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">' +
+                '<strong style="color:var(--sky); font-size:0.82rem;">[세부 질문 4개]</strong>' +
+                '<button type="button" class="tool-btn ped-subq-toggle-btn" id="ped-blind-btn-' + d.id + '" onclick="togglePedagogyBlind(\'' + d.id + '\')" style="padding:2px 8px; font-size:0.75rem; background:#1e293b; border-color:#38bdf8; color:#38bdf8; cursor:pointer;">👁️ 세부 질문 4개 열기</button>' +
+              '</div>' +
+              '<div id="ped-blind-placeholder-' + d.id + '" style="font-size:0.78rem; color:var(--text-dim); padding:6px 0;">' +
+                '👁️ 실전 백지 인출 연습을 위해 세부 질문이 처음에는 가려져 있습니다. [열기] 버튼을 누르면 질문과 키워드가 표시됩니다.' +
+              '</div>' +
+              '<div class="ped-subq-container" id="ped-subq-' + d.id + '" style="display:none; font-size:0.84rem; color:#e2e8f0; max-height:260px; overflow-y:auto; margin-top:4px;">' +
+                '<ol style="margin-left:16px; line-height:1.5;">' + subQList + '</ol>' +
+              '</div>' +
+              '<div class="keyword-tags ped-kw-container" id="ped-kw-' + d.id + '" style="display:none; margin-top:6px;">' + kwBadges + '</div>' +
+            '</div>'
           ) +
         '</div>' +
         '<div class="exam-right-col">' +
