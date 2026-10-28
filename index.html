@@ -1562,6 +1562,7 @@ body.blind-mode .kw-tag.revealed {
         <button class="tool-btn" onclick="filterTop55('part4', this)">4. 심리평가 (46~55)</button>
         <button class="tool-btn" onclick="filterTop55('pedagogy', this)">📖 교육학 20선</button>
         <button class="tool-btn" style="background:#3b1e32; border-color:#f43f5e; color:#fca5a5; margin-left:auto;" onclick="toggleAllTop55Blind(this)">👁️ 전체 정답 가리기</button>
+        <button class="tool-btn" style="background:#451a1a; border-color:#ef4444; color:#fca5a5;" onclick="clearAllUserAnswers()">🧹 작성 답안 전체 초기화</button>
       </div>
 </div>
 
@@ -1689,6 +1690,22 @@ let timerInterval = null;
 
 // Initialize
 window.addEventListener('DOMContentLoaded', () => {
+  // 1. 기존 테스트 답안 완전 초기화 (선생님 화면의 잔여 답안 1회성 전체 삭제)
+  if (localStorage.getItem('kice_reset_cleared_v2') !== 'true') {
+    const keysToRemove = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      const k = localStorage.key(i);
+      if (k && (k.startsWith('top55_type_') || k.startsWith('kice_ped_') || k.startsWith('kice_ans_'))) {
+        keysToRemove.push(k);
+      }
+    }
+    keysToRemove.forEach(k => localStorage.removeItem(k));
+    localStorage.setItem('kice_reset_cleared_v2', 'true');
+  }
+
+  // 2. 매번 들어갈 때마다 암호 입력 요구 (영구 저장 세션 제거)
+  localStorage.removeItem(VIP_STORAGE_KEY);
+
   getOrCreateDeviceId();
   updateVipUI();
   renderTop55();
@@ -1698,6 +1715,13 @@ window.addEventListener('DOMContentLoaded', () => {
   updateProgress();
   loadAllSavedAnswers();
   updateTimerDisplay();
+
+  // 매번 들어올 때마다 암호 입력: 로그인되지 않은 경우 로그인 모달 자동 오픈
+  if (!isVipActive()) {
+    setTimeout(() => {
+      openLoginModal();
+    }, 400);
+  }
 });
 
 // Tab Switcher
@@ -1909,6 +1933,34 @@ function resetTop55Typing(code, totalLines) {
   updateTop55CardProgress(code);
   const firstInput = document.getElementById('type-' + code + '-1');
   if (firstInput) firstInput.focus();
+}
+
+
+function clearAllUserAnswers() {
+  if (!confirm('작성하신 모든 따라치기 및 모의고사 답안을 깨끗하게 지우고 초기화하시겠습니까?')) return;
+  const keysToRemove = [];
+  for (let i = 0; i < localStorage.length; i++) {
+    const k = localStorage.key(i);
+    if (k && (k.startsWith('top55_type_') || k.startsWith('kice_ped_') || k.startsWith('kice_ans_') || k.startsWith('top55_chk_'))) {
+      keysToRemove.push(k);
+    }
+  }
+  keysToRemove.forEach(k => localStorage.removeItem(k));
+
+  document.querySelectorAll('.line-type-input, .pedagogy-textarea, .kice-textarea, .kice-input-short').forEach(el => {
+    el.value = '';
+    el.classList.remove('match-exact', 'typing-active');
+  });
+  document.querySelectorAll('.line-status-badge').forEach(el => {
+    el.innerText = '';
+    el.className = 'line-status-badge';
+  });
+  document.querySelectorAll('.char-count').forEach(el => {
+    el.innerText = '0자';
+  });
+  reRenderCurrentTab();
+  updateProgress();
+  alert('✅ 작성하신 모든 답안이 깨끗하게 초기화(백지화)되었습니다.');
 }
 
 function renderTop55() {
@@ -2608,14 +2660,14 @@ function getOrCreateDeviceId() {
 
 function getVipSession() {
   try {
-    const raw = localStorage.getItem(VIP_STORAGE_KEY);
+    const raw = sessionStorage.getItem(VIP_STORAGE_KEY);
     if (!raw) return null;
     const session = JSON.parse(raw);
     const currentDev = getOrCreateDeviceId();
     // Device check: must match the device stored in this browser
     if (session.deviceId !== currentDev) {
       console.warn('Device ID mismatch in session');
-      localStorage.removeItem(VIP_STORAGE_KEY);
+      sessionStorage.removeItem(VIP_STORAGE_KEY);
       return null;
     }
     return session;
@@ -2731,7 +2783,7 @@ async function executeVipLogin() {
         deviceId: deviceId,
         timestamp: Date.now()
       };
-      localStorage.setItem(VIP_STORAGE_KEY, JSON.stringify(session));
+      sessionStorage.setItem(VIP_STORAGE_KEY, JSON.stringify(session)); localStorage.removeItem(VIP_STORAGE_KEY);
       showVipMsg('👑 관리자 마스터 로그인 성공! (기기 무제한)', 'success');
       setTimeout(() => {
         closeVipModal();
@@ -2784,7 +2836,7 @@ async function executeVipLogin() {
       deviceId: deviceId,
       timestamp: Date.now()
     };
-    localStorage.setItem(VIP_STORAGE_KEY, JSON.stringify(session));
+    sessionStorage.setItem(VIP_STORAGE_KEY, JSON.stringify(session)); localStorage.removeItem(VIP_STORAGE_KEY);
     showVipMsg('👑 ' + user.name + '님 1인 1기기 인증 성공! 전 문항 잠금 해제되었습니다.', 'success');
     setTimeout(() => {
       closeVipModal();
@@ -2805,7 +2857,7 @@ async function executeVipLogin() {
         deviceId: deviceId,
         timestamp: Date.now()
       };
-      localStorage.setItem(VIP_STORAGE_KEY, JSON.stringify(session));
+      sessionStorage.setItem(VIP_STORAGE_KEY, JSON.stringify(session)); localStorage.removeItem(VIP_STORAGE_KEY);
       showVipMsg('VIP 라이선스 인증 완료! (' + deviceId + ' 기기 등록)', 'success');
       setTimeout(() => {
         closeVipModal();
@@ -2836,7 +2888,7 @@ async function executeVipLogin() {
         deviceId: deviceId,
         timestamp: Date.now()
       };
-      localStorage.setItem(VIP_STORAGE_KEY, JSON.stringify(session));
+      sessionStorage.setItem(VIP_STORAGE_KEY, JSON.stringify(session)); localStorage.removeItem(VIP_STORAGE_KEY);
       showVipMsg(data.message || '인증 성공! 이 기기로 등록되었습니다.', 'success');
       setTimeout(() => {
         closeVipModal();
@@ -2864,9 +2916,11 @@ function showVipMsg(msg, type) {
 
 function logoutVIP() {
   if (confirm('로그아웃 하시겠습니까? (이 기기의 등록 상태는 유지됩니다)')) {
+    sessionStorage.removeItem(VIP_STORAGE_KEY);
     localStorage.removeItem(VIP_STORAGE_KEY);
     updateVipUI();
     reRenderCurrentTab();
+    openLoginModal();
   }
 }
 
@@ -2876,6 +2930,22 @@ function reRenderCurrentTab() {
   if (typeof renderExamQuestions === 'function') {
     renderExamQuestions('A');
     renderExamQuestions('B');
+  }
+}
+
+
+async function executeAdminDeviceReset() {
+  const sel = document.getElementById('admin-reset-member-select');
+  if (!sel) return;
+  const memberId = sel.value;
+  if (!confirm(memberId + ' 회원의 등록된 기기를 초기화하시겠습니까?\n(새로운 기기에서 로그인할 수 있게 됩니다)')) return;
+
+  const delUrl = 'https://firestore.googleapis.com/v1/projects/kice-study-29a5c/databases/(default)/documents/bound_devices/' + encodeURIComponent(memberId);
+  try {
+    const res = await fetch(delUrl, { method: 'DELETE' });
+    alert('✅ ' + memberId + ' 회원의 기기 등록이 성공적으로 초기화되었습니다!\n해당 회원이 새 기기에서 로그인하면 즉시 자동 등록됩니다.');
+  } catch (err) {
+    alert('기기 초기화 실패: ' + err.message);
   }
 }
 
@@ -2943,8 +3013,25 @@ function reRenderCurrentTab() {
       </div>
       <button class="tool-btn" style="width: 100%; padding: 10px; margin-top: 4px;" onclick="saveVipApiUrl()">연동 URL 저장 및 테스트</button>
       <div style="margin-top: 12px; font-size: 0.75rem; color: var(--text-dim); line-height: 1.4;">
-        * 구글 시트 연동 전에는 마스터 관리자 키(아이디: <b>cntfed</b> / 비밀번호: <b>cntfed</b>)로 즉시 전체 잠금 해제가 가능합니다.
+        * 마스터 관리자 키(아이디: <b>cntfed</b> / 비밀번호: <b>cntfed</b>)로 로그인하시면 전체 잠금 해제 및 회원 기기 리셋이 가능합니다.
       </div>
+
+      <!-- Admin Only Device Reset Box -->
+      <div id="admin-device-reset-box" style="margin-top: 14px; padding: 12px; background: rgba(245, 158, 11, 0.1); border: 1px solid var(--gold); border-radius: 8px;">
+        <div style="font-weight: 800; color: var(--gold); font-size: 0.88rem; margin-bottom: 6px;">👑 관리자 전용: 회원 기기 초기화 (리셋)</div>
+        <div style="font-size: 0.75rem; color: var(--text-sub); margin-bottom: 8px;">회원이 노트북이나 폰을 바꿨을 때 선택 후 리셋을 누르면 새 기기에서 재등록됩니다.</div>
+        <select id="admin-reset-member-select" class="vip-form-input" style="margin-bottom: 8px; font-weight: 700;">
+          <option value="엉엉우는어피치">엉엉 우는 어피치</option>
+          <option value="죠르디">죠르디</option>
+          <option value="춘식">춘식</option>
+          <option value="교대원2학차">교대원 2학차</option>
+          <option value="라이언">라이언</option>
+          <option value="화이팅춘식이">화이팅 춘식이</option>
+          <option value="rann">rann♡</option>
+        </select>
+        <button type="button" style="width: 100%; padding: 8px; background: linear-gradient(135deg, #f43f5e, #be123c); color: #fff; font-weight: 800; border: none; border-radius: 6px; cursor: pointer; font-size: 0.82rem;" onclick="executeAdminDeviceReset()">선택한 회원 기기 리셋 실행</button>
+      </div>
+
     </div>
   </div>
 </div>
