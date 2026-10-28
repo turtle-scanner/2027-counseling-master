@@ -2076,8 +2076,16 @@ function renderTop55() {
           '외웠어요' +
         '</label>' +
       '</div>' +
-      '<div class="card-question">' + item.question + '</div>' +
-      '<div class="keyword-tags">' + kwTags + '</div>' +
+      (isLocked ? 
+        '<div style="position:relative; overflow:hidden; border-radius:8px; margin-bottom:8px;">' +
+          '<div class="card-question" style="filter:blur(5px); user-select:none; pointer-events:none; opacity:0.35;">' + item.question + '</div>' +
+          '<div style="position:absolute; top:0; left:0; right:0; bottom:0; display:flex; align-items:center; justify-content:center; background:rgba(9,13,22,0.6);">' +
+            '<span style="font-size:0.82rem; font-weight:700; color:var(--gold);">🔒 문제 잠김 (VIP 전용)</span>' +
+          '</div>' +
+        '</div>' :
+        '<div class="card-question">' + item.question + '</div>' +
+        '<div class="keyword-tags">' + kwTags + '</div>'
+      ) +
       answerHtml;
 
     container.appendChild(card);
@@ -2173,11 +2181,25 @@ function renderPedagogy() {
       '</div>' +
       '<div class="exam-split-grid">' +
         '<div class="exam-left-col">' +
-          '<div style="background:#090d16; border:1px solid #1e293b; border-radius:8px; padding:10px 14px; font-size:0.84rem; color:#e2e8f0; max-height:260px; overflow-y:auto;">' +
-            '<strong style="color:var(--sky); font-size:0.82rem;">[세부 질문 4개]</strong>' +
-            '<ol style="margin-left:16px; margin-top:4px; line-height:1.5;">' + subQList + '</ol>' +
-          '</div>' +
-          '<div class="keyword-tags" style="margin-top:4px;">' + kwBadges + '</div>' +
+          (isLocked ? 
+            '<div style="position:relative; overflow:hidden; border-radius:8px;">' +
+              '<div style="background:#090d16; border:1px solid #1e293b; border-radius:8px; padding:10px 14px; font-size:0.84rem; color:#e2e8f0; filter:blur(6px); user-select:none; pointer-events:none; opacity:0.35;">' +
+                '<strong style="color:var(--sky); font-size:0.82rem;">[세부 질문 4개]</strong>' +
+                '<ol style="margin-left:16px; margin-top:4px; line-height:1.5;">' + subQList + '</ol>' +
+              '</div>' +
+              '<div style="position:absolute; top:0; left:0; right:0; bottom:0; display:flex; flex-direction:column; align-items:center; justify-content:center; background:rgba(9,13,22,0.7); backdrop-filter:blur(2px); text-align:center; padding:16px;">' +
+                '<span style="font-size:2rem; margin-bottom:4px;">🔒</span>' +
+                '<strong style="color:var(--gold); font-size:0.95rem; margin-bottom:4px;">[' + d.name + ' 영역] 세부 질문 잠금</strong>' +
+                '<span style="color:var(--text-sub); font-size:0.8rem; margin-bottom:10px;">3만 원 마스터패스 활성화 시 4개 질문이 선명하게 공개됩니다.</span>' +
+                '<button class="vip-unlock-action-btn" onclick="openLoginModal()" style="font-size:0.78rem; padding:5px 12px;">🔑 질문 잠금 해제하기</button>' +
+              '</div>' +
+            '</div>' :
+            '<div style="background:#090d16; border:1px solid #1e293b; border-radius:8px; padding:10px 14px; font-size:0.84rem; color:#e2e8f0; max-height:260px; overflow-y:auto;">' +
+              '<strong style="color:var(--sky); font-size:0.82rem;">[세부 질문 4개]</strong>' +
+              '<ol style="margin-left:16px; margin-top:4px; line-height:1.5;">' + subQList + '</ol>' +
+            '</div>' +
+            '<div class="keyword-tags" style="margin-top:4px;">' + kwBadges + '</div>'
+          ) +
         '</div>' +
         '<div class="exam-right-col">' +
           (isLocked ? 
@@ -2297,8 +2319,18 @@ function renderExamQuestions(type) {
       '</div>' +
       '<div class="exam-split-grid">' +
         '<div class="exam-left-col">' +
-          '<div class="exam-case-box">' + q.content + '</div>' +
-          instHtml +
+          (isLocked ? 
+            '<div style="position:relative; overflow:hidden; border-radius:8px;">' +
+              '<div class="exam-case-box" style="filter:blur(6px); user-select:none; pointer-events:none; opacity:0.35;">' + q.content + '</div>' +
+              '<div style="position:absolute; top:0; left:0; right:0; bottom:0; display:flex; flex-direction:column; align-items:center; justify-content:center; background:rgba(9,13,22,0.7); backdrop-filter:blur(2px); text-align:center; padding:16px;">' +
+                '<span style="font-size:2.2rem; margin-bottom:6px;">🔒</span>' +
+                '<strong style="color:var(--gold); font-size:1rem; margin-bottom:4px;">[' + type + '형 ' + q.num + '번] 실전 지문 및 세부 작성방법 잠금</strong>' +
+                '<span style="color:var(--text-sub); font-size:0.82rem; margin-bottom:12px;">3만 원 마스터패스 활성화 시 즉시 선명하게 공개됩니다.</span>' +
+                '<button class="vip-unlock-action-btn" onclick="openLoginModal()" style="font-size:0.8rem; padding:6px 14px;">🔑 문제 잠금 해제하기</button>' +
+              '</div>' +
+            '</div>' :
+            '<div class="exam-case-box">' + q.content + '</div>' + instHtml
+          ) +
         '</div>' +
         '<div class="exam-right-col">' +
           (isLocked ? 
