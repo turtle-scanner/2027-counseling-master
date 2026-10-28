@@ -2701,15 +2701,59 @@ async function executeVipLogin() {
       return;
     }
 
-    // 1-Device Lock Check
-    const boundKey = 'kice_bound_dev_' + cleanId;
-    const boundDev = localStorage.getItem(boundKey);
-    if (!boundDev) {
-      // First login: bind this device!
-      localStorage.setItem(boundKey, deviceId);
-    } else if (boundDev !== deviceId) {
-      showVipMsg('⚠️ [계정 공유 차단] 이미 다른 기기(1대)에 등록된 아이디입니다. 1아이디당 1기기만 사용 가능합니다. (기기 변경 문의: 관리자)', 'error');
+    // Admin bypasses device lock so teacher can login anywhere
+    if (user.role === 'admin') {
+      const session = {
+        userId: cleanId,
+        userName: user.name,
+        deviceId: deviceId,
+        timestamp: Date.now()
+      };
+      localStorage.setItem(VIP_STORAGE_KEY, JSON.stringify(session));
+      showVipMsg('👑 관리자 마스터 로그인 성공! (기기 무제한)', 'success');
+      setTimeout(() => {
+        closeVipModal();
+        updateVipUI();
+        reRenderCurrentTab();
+      }, 600);
       return;
+    }
+
+    submitBtn.disabled = true;
+    submitBtn.innerText = '1인 1기기 클라우드 보안 검증 중...';
+
+    // Cloud 1-Device Lock Check via Firestore REST API (Cross-Computer Real-Time Block)
+    const fsDocUrl = 'https://firestore.googleapis.com/v1/projects/kice-study-29a5c/databases/(default)/documents/bound_devices/' + encodeURIComponent(cleanId);
+    
+    try {
+      const fsRes = await fetch(fsDocUrl);
+      if (fsRes.status === 200) {
+        const docData = await fsRes.json();
+        const boundDev = docData.fields && docData.fields.deviceId && docData.fields.deviceId.stringValue;
+        if (boundDev && boundDev !== deviceId) {
+          showVipMsg('⚠️ [계정 공유 차단] 이미 다른 기기(1대)에 등록된 아이디입니다. 1아이디당 1기기만 사용 가능합니다. (기기 변경 문의: 관리자)', 'error');
+          submitBtn.disabled = false;
+          submitBtn.innerText = '인증 및 마스터패스 활성화';
+          return;
+        }
+      } else if (fsRes.status === 404) {
+        // First login: bind this device in Firestore cloud!
+        const postUrl = 'https://firestore.googleapis.com/v1/projects/kice-study-29a5c/databases/(default)/documents/bound_devices?documentId=' + encodeURIComponent(cleanId);
+        const payload = {
+          fields: {
+            deviceId: { stringValue: deviceId },
+            userName: { stringValue: user.name },
+            registeredAt: { stringValue: new Date().toISOString() }
+          }
+        };
+        await fetch(postUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+      }
+    } catch (netErr) {
+      console.warn('Firestore cloud check fallback to local check', netErr);
     }
 
     const session = {
