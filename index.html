@@ -1988,7 +1988,7 @@ function renderTop55() {
   });
 
   filtered.forEach((item, index) => {
-    const isFree = index < 3;
+    const isFree = (item.type !== 'pedagogy') && (index < 3);
     const isLocked = !isVipActive() && !isFree;
     const isMemorized = localStorage.getItem('top55_chk_' + item.code) === 'true';
     const card = document.createElement('div');
@@ -2205,14 +2205,27 @@ function renderPedagogy() {
     const pedTitleEl = document.getElementById('ped-title');
   const pedCaseEl = document.getElementById('ped-case');
   if (pedTitleEl) pedTitleEl.innerText = ped.title || '2027학년도 중등교사 임용후보자 선정경쟁시험 1교시 교육학 논술';
-  if (pedCaseEl) pedCaseEl.innerText = ped.case || '';
+  if (pedCaseEl) {
+    pedCaseEl.innerText = ped.case || '';
+    if (!isVipActive()) {
+      pedCaseEl.style.filter = 'blur(5px)';
+      pedCaseEl.style.userSelect = 'none';
+      pedCaseEl.style.pointerEvents = 'none';
+      pedCaseEl.style.opacity = '0.35';
+    } else {
+      pedCaseEl.style.filter = 'none';
+      pedCaseEl.style.userSelect = 'auto';
+      pedCaseEl.style.pointerEvents = 'auto';
+      pedCaseEl.style.opacity = '1';
+    }
+  }
 
   const container = document.getElementById('ped-domain-cards');
   if (!container) return;
   container.innerHTML = '';
 
   ped.domains.forEach((d, dIndex) => {
-    const isFree = dIndex === 0;
+    const isFree = false; // 교육학은 전 문항 100% VIP 전용 잠금
     const isLocked = !isVipActive() && !isFree;
     const card = document.createElement('div');
     card.className = 'exam-full-card';
@@ -2227,7 +2240,7 @@ function renderPedagogy() {
       '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">' +
         '<div style="display:flex; align-items:center; gap:6px;">' +
           '<span class="badge badge-pedagogy" style="font-size:0.78rem;">' + d.name + ' 영역</span>' +
-          '<strong style="color:#fff; font-size:0.92rem;">' + d.theory + '</strong>' +
+          (isLocked ? '<strong style="color:#94a3b8; font-size:0.92rem; filter:blur(4px); user-select:none;">' + d.theory + '</strong>' : '<strong style="color:#fff; font-size:0.92rem;">' + d.theory + '</strong>') +
         '</div>' +
         '<span class="badge badge-score" style="font-size:0.75rem;">' + d.score + '점</span>' +
       '</div>' +
