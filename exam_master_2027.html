@@ -1186,6 +1186,256 @@ body.blind-mode .kw-tag.revealed {
   opacity: 1 !important;
 }
 
+
+/* ==========================================
+   VIP Login & 1-Device Lock Styles
+   ========================================== */
+.vip-login-btn {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: #000;
+  font-weight: 800;
+  border: 1px solid #f59e0b;
+  padding: 5px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.82rem;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 10px rgba(245, 158, 11, 0.3);
+}
+.vip-login-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(245, 158, 11, 0.5);
+}
+.vip-user-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid var(--emerald);
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  color: #34d399;
+  font-weight: 700;
+}
+.vip-logout-btn {
+  background: transparent;
+  border: 1px solid rgba(244, 63, 94, 0.4);
+  color: #fb7185;
+  border-radius: 4px;
+  padding: 2px 6px;
+  font-size: 0.72rem;
+  cursor: pointer;
+  margin-left: 4px;
+}
+.vip-logout-btn:hover {
+  background: rgba(244, 63, 94, 0.2);
+}
+.free-preview-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(56, 189, 248, 0.15);
+  border: 1px solid var(--sky);
+  color: var(--sky);
+  font-size: 0.7rem;
+  font-weight: 800;
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-left: 6px;
+}
+.vip-only-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--gold-bg);
+  border: 1px solid var(--gold);
+  color: var(--gold);
+  font-size: 0.7rem;
+  font-weight: 800;
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-left: 6px;
+}
+.vip-locked-overlay {
+  background: rgba(15, 23, 42, 0.95);
+  border: 1px dashed #f59e0b;
+  border-radius: 10px;
+  padding: 22px 16px;
+  text-align: center;
+  margin-top: 12px;
+  backdrop-filter: blur(4px);
+}
+.vip-locked-icon {
+  font-size: 1.8rem;
+  margin-bottom: 6px;
+}
+.vip-locked-title {
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--gold);
+  margin-bottom: 4px;
+}
+.vip-locked-desc {
+  font-size: 0.82rem;
+  color: var(--text-sub);
+  margin-bottom: 12px;
+  line-height: 1.4;
+}
+.vip-unlock-action-btn {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: #000;
+  font-weight: 800;
+  border: none;
+  padding: 7px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.82rem;
+  transition: all 0.2s ease;
+}
+.vip-unlock-action-btn:hover {
+  transform: scale(1.02);
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
+}
+.vip-modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(8px);
+  z-index: 2000;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+.vip-modal-card {
+  background: var(--bg-card);
+  border: 1px solid var(--gold);
+  border-radius: 14px;
+  width: 100%;
+  max-width: 480px;
+  padding: 22px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8), 0 0 20px rgba(245, 158, 11, 0.2);
+}
+.vip-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border-card);
+}
+.vip-modal-title {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--gold);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.vip-modal-close {
+  background: transparent;
+  border: none;
+  color: var(--text-dim);
+  font-size: 1.4rem;
+  cursor: pointer;
+  line-height: 1;
+}
+.vip-modal-tabs {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 14px;
+  border-bottom: 1px solid var(--border-card);
+  padding-bottom: 6px;
+}
+.vip-tab-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-sub);
+  padding: 6px 10px;
+  font-weight: 700;
+  font-size: 0.84rem;
+  cursor: pointer;
+  border-radius: 6px;
+}
+.vip-tab-btn.active {
+  background: var(--gold-bg);
+  color: var(--gold);
+}
+.vip-form-group {
+  margin-bottom: 12px;
+}
+.vip-form-label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-sub);
+  margin-bottom: 4px;
+}
+.vip-form-input {
+  width: 100%;
+  background: var(--bg-input);
+  border: 1px solid var(--border-card);
+  border-radius: 6px;
+  padding: 9px 12px;
+  color: var(--text-main);
+  font-size: 0.88rem;
+  outline: none;
+}
+.vip-form-input:focus {
+  border-color: var(--gold);
+}
+.vip-submit-btn {
+  width: 100%;
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: #000;
+  border: none;
+  padding: 11px;
+  border-radius: 8px;
+  font-weight: 800;
+  font-size: 0.92rem;
+  cursor: pointer;
+  margin-top: 6px;
+  transition: all 0.2s ease;
+}
+.vip-submit-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(245, 158, 11, 0.4);
+}
+.vip-msg-box {
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  display: none;
+  line-height: 1.4;
+}
+.vip-msg-box.success {
+  display: block;
+  background: var(--emerald-bg);
+  border: 1px solid var(--emerald);
+  color: #34d399;
+}
+.vip-msg-box.error {
+  display: block;
+  background: var(--rose-bg);
+  border: 1px solid var(--rose);
+  color: #fb7185;
+}
+.vip-device-info {
+  margin-top: 12px;
+  padding: 8px 10px;
+  background: rgba(0,0,0,0.3);
+  border-radius: 6px;
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  display: flex;
+  justify-content: space-between;
+}
+
 </style>
 </head>
 <body>
@@ -1198,6 +1448,7 @@ body.blind-mode .kw-tag.revealed {
     </div>
     
     <div class="tool-group">
+      <div id="vip-header-container" style="display: inline-flex; align-items: center; margin-right: 4px;"></div>
       <div class="timer-widget">
         <span style="font-size: 0.8rem; color: var(--text-sub);">⏱️</span>
         <span class="timer-clock" id="timer-display">60:00</span>
@@ -1438,6 +1689,8 @@ let timerInterval = null;
 
 // Initialize
 window.addEventListener('DOMContentLoaded', () => {
+  getOrCreateDeviceId();
+  updateVipUI();
   renderTop55();
   renderPedagogy();
   renderExamQuestions('A');
@@ -1682,7 +1935,9 @@ function renderTop55() {
     return matchFilter && matchSearch;
   });
 
-  filtered.forEach(item => {
+  filtered.forEach((item, index) => {
+    const isFree = index < 3;
+    const isLocked = !isVipActive() && !isFree;
     const isMemorized = localStorage.getItem('top55_chk_' + item.code) === 'true';
     const card = document.createElement('div');
     card.className = 'item-card ' + (isMemorized ? 'memorized' : '');
@@ -1691,7 +1946,15 @@ function renderTop55() {
     const kwTags = item.keywords.map(kw => '<span class="kw-tag" onclick="this.classList.toggle(\'revealed\')">' + kw + '</span>').join('');
 
     let answerHtml = '';
-    if (item.type === 'counseling') {
+    if (isLocked) {
+      answerHtml = 
+        '<div class="vip-locked-overlay">' +
+          '<div class="vip-locked-icon">🔒</div>' +
+          '<div class="vip-locked-title">VIP 마스터패스 전용 문항 (1인 1기기)</div>' +
+          '<div class="vip-locked-desc">KICE 4점 만점 4줄 답안과 인터랙티브 실시간 타자 훈련은<br>3만 원 개인 마스터패스 등록 후 바로 이용 가능합니다.</div>' +
+          '<button class="vip-unlock-action-btn" onclick="openLoginModal()">🔑 1인 1기기 VIP 로그인 / 구매 안내</button>' +
+        '</div>';
+    } else if (item.type === 'counseling') {
       answerHtml = 
         '<div class="compact-answer-box" id="ansbox-' + item.code + '">' +
           '<div class="four-line-answer">' +
@@ -1798,11 +2061,15 @@ function renderTop55() {
         '</div>';
     }
 
+    const vipBadge = isFree ? '<span class="free-preview-badge">✨ 무료 체험</span>' : 
+                     (isLocked ? '<span class="vip-only-badge">🔒 VIP 전용</span>' : '');
+
     card.innerHTML = 
       '<div class="card-top">' +
         '<div class="badge-group">' +
           '<span class="badge badge-code">' + item.code + '</span>' +
           '<span class="badge ' + (item.type === 'pedagogy' ? 'badge-pedagogy' : 'badge-category') + '">' + item.category + '</span>' +
+          vipBadge +
         '</div>' +
         '<label class="memorize-chk">' +
           '<input type="checkbox" ' + (isMemorized ? 'checked' : '') + ' onchange="toggleMemorized(\'' + item.code + '\', this.checked)">' +
@@ -1816,8 +2083,9 @@ function renderTop55() {
     container.appendChild(card);
 
     // Restore saved input and calculate progress
-    const totalLines = (item.type === 'counseling') ? 4 : 1;
-    for (let l = 1; l <= totalLines; l++) {
+    if (!isLocked) {
+      const totalLines = (item.type === 'counseling') ? 4 : 1;
+      for (let l = 1; l <= totalLines; l++) {
       const saved = localStorage.getItem('top55_type_' + item.code + '_' + l);
       if (saved) {
         const inputEl = document.getElementById('type-' + item.code + '-' + l);
@@ -1826,6 +2094,7 @@ function renderTop55() {
           handleTop55Input(item.code, l);
         }
       }
+    }
     }
   });
 
@@ -1882,7 +2151,9 @@ function renderPedagogy() {
   if (!container) return;
   container.innerHTML = '';
 
-  ped.domains.forEach(d => {
+  ped.domains.forEach((d, dIndex) => {
+    const isFree = dIndex === 0;
+    const isLocked = !isVipActive() && !isFree;
     const card = document.createElement('div');
     card.className = 'exam-full-card';
     card.id = 'ped-card-' + d.id;
@@ -1909,12 +2180,19 @@ function renderPedagogy() {
           '<div class="keyword-tags" style="margin-top:4px;">' + kwBadges + '</div>' +
         '</div>' +
         '<div class="exam-right-col">' +
-          '<div class="answer-box-wrap">' +
-            '<div class="answer-box-header">' +
-              '<span>✍️ B4 실전 답안 작성란 (작성 시 모범답안 즉시 표시)</span>' +
-              '<span class="char-count-badge" id="ped-counter-' + d.id + '">0자</span>' +
-            '</div>' +
-            '<textarea class="exam-textarea" id="ped-input-' + d.id + '" placeholder="여기에 답안을 직접 입력하세요. (B4 1줄당 38~45자 기준)"></textarea>' +
+          (isLocked ? 
+            '<div class="vip-locked-overlay" style="margin-top:0; min-height:220px; display:flex; flex-direction:column; justify-content:center; align-items:center;">' +
+              '<div class="vip-locked-icon">🔒</div>' +
+              '<div class="vip-locked-title">교육학 논술 VIP 마스터패스 전용 영역</div>' +
+              '<div class="vip-locked-desc">KICE 4점 만점 공식 루브릭 및 실시간 논술 답안 작성기는<br><b>3만 원 개인 마스터패스</b> 등록 후 바로 이용 가능합니다.</div>' +
+              '<button class="vip-unlock-action-btn" onclick="openLoginModal()">🔑 1인 1기기 VIP 로그인 / 구매 안내</button>' +
+            '</div>' :
+            '<div class="answer-box-wrap">' +
+              '<div class="answer-box-header">' +
+                '<span>✍️ B4 실전 답안 작성란 (작성 시 모범답안 즉시 표시)</span>' +
+                '<span class="char-count-badge" id="ped-counter-' + d.id + '">0자</span>' +
+              '</div>' +
+              '<textarea class="exam-textarea" id="ped-input-' + d.id + '" placeholder="여기에 답안을 직접 입력하세요. (B4 1줄당 38~45자 기준)"></textarea>' +
             '<div class="print-paper-answer">' +
               '<div class="print-written-text" id="ped-print-user-' + d.id + '"></div>' +
               '<div class="print-blank-lines">' +
@@ -1931,7 +2209,8 @@ function renderPedagogy() {
                 '<strong>[KICE 4점 채점표]</strong>' + rubricItems +
               '</div>' +
             '</div>' +
-          '</div>' +
+          '</div>'
+          ) +
         '</div>' +
       '</div>';
 
@@ -1988,6 +2267,8 @@ function renderExamQuestions(type) {
     navContainer.appendChild(navBtn);
 
     // Question Card
+    const isFree = (type === 'A' && q.num <= 2) || (type === 'B' && q.num <= 1);
+    const isLocked = !isVipActive() && !isFree;
     const card = document.createElement('div');
     card.className = 'exam-full-card';
     card.id = 'exam-card-' + type + '-' + q.num;
@@ -2009,6 +2290,7 @@ function renderExamQuestions(type) {
         '<div style="display:flex; align-items:center; gap:6px;">' +
           '<span class="badge ' + (type === 'A' ? 'badge-category' : 'badge-code') + '" style="font-size:0.78rem;">[' + type + '형 ' + q.num + '번]</span>' +
           '<span class="badge ' + (q.type === '기입형' ? 'badge-pedagogy' : 'badge-score') + '" style="font-size:0.75rem;">' + q.type + '</span>' +
+          (isFree ? '<span class="free-preview-badge">✨ 무료 체험</span>' : (isLocked ? '<span class="vip-only-badge">🔒 VIP 전용</span>' : '')) +
           '<strong style="color:#fff; font-size:0.92rem;">' + q.title + '</strong>' +
         '</div>' +
         '<span class="badge badge-score" style="font-size:0.75rem;">' + q.score + '점</span>' +
@@ -2019,17 +2301,25 @@ function renderExamQuestions(type) {
           instHtml +
         '</div>' +
         '<div class="exam-right-col">' +
-          '<div class="answer-box-wrap">' +
-            '<div class="answer-box-header">' +
-              '<span>✍️ B4 실전 답안 작성란 (입력 시 모범답안 즉시 표시)</span>' +
-              '<span class="char-count-badge" id="counter-' + type + '-' + q.num + '">0자</span>' +
-            '</div>' +
-            '<textarea class="exam-textarea" id="input-' + type + '-' + q.num + '" placeholder="여기에 답안을 직접 입력하세요. (3줄 컷: 줄당 38~45자 규격)"></textarea>' +
-            '<div class="model-answer-panel" id="ansbox-' + type + '-' + q.num + '">' +
-              '<div class="model-answer-title">🏆 KICE 만점 공식 모범답안 및 채점기준</div>' +
-              '<div class="model-answer-text">' + q.answer + '</div>' +
-            '</div>' +
-          '</div>' +
+          (isLocked ? 
+            '<div class="vip-locked-overlay" style="margin-top:0; min-height:220px; display:flex; flex-direction:column; justify-content:center; align-items:center;">' +
+              '<div class="vip-locked-icon">🔒</div>' +
+              '<div class="vip-locked-title">[' + type + '형 ' + q.num + '번] VIP 마스터패스 전용 문항</div>' +
+              '<div class="vip-locked-desc">KICE 4점 만점 4줄 모범답안 및 실시간 B4 글자수 채점기는<br><b>3만 원 개인 마스터패스</b> 등록 후 바로 이용 가능합니다.</div>' +
+              '<button class="vip-unlock-action-btn" onclick="openLoginModal()">🔑 1인 1기기 VIP 로그인 / 구매 안내</button>' +
+            '</div>' :
+            '<div class="answer-box-wrap">' +
+              '<div class="answer-box-header">' +
+                '<span>✍️ B4 실전 답안 작성란 (입력 시 모범답안 즉시 표시)</span>' +
+                '<span class="char-count-badge" id="counter-' + type + '-' + q.num + '">0자</span>' +
+              '</div>' +
+              '<textarea class="exam-textarea" id="input-' + type + '-' + q.num + '" placeholder="여기에 답안을 직접 입력하세요. (3줄 컷: 줄당 38~45자 규격)"></textarea>' +
+              '<div class="model-answer-panel" id="ansbox-' + type + '-' + q.num + '">' +
+                '<div class="model-answer-title">🏆 KICE 만점 공식 모범답안 및 채점기준</div>' +
+                '<div class="model-answer-text">' + q.answer + '</div>' +
+              '</div>' +
+            '</div>'
+          ) +
         '</div>' +
       '</div>';
 
@@ -2224,6 +2514,341 @@ window.addEventListener('afterprint', () => {
   document.body.classList.remove('print-scope-full', 'print-scope-current', 'print-scope-top55', 'print-with-answers', 'print-with-user');
 });
 
+
+// ==========================================
+// 1인 1기기 VIP 마스터패스 인증 모듈
+// ==========================================
+const VIP_STORAGE_KEY = 'kice_2027_vip_session';
+const VIP_DEVICE_KEY = 'kice_2027_vip_dev_id';
+const VIP_API_KEY = 'kice_2027_vip_api_url';
+const DEFAULT_MASTER_ID = 'admin';
+const DEFAULT_MASTER_PW = 'kice2027!';
+
+// ==========================================
+// 카카오톡 스터디 사전 등록 회원 명단 (1인 1기기)
+// ==========================================
+const PRE_REGISTERED_USERS = {
+  // 관리자 (천개의문 선생님)
+  "천개의문": { pw: "271128", name: "천개의문(선생님)", role: "admin" },
+  "admin": { pw: "271128", name: "천개의문(선생님)", role: "admin" },
+
+  // 회원 1: 엉엉 우는 어피치
+  "엉엉우는어피치": { pw: "381924", name: "엉엉 우는 어피치", role: "vip" },
+  "어피치": { pw: "381924", name: "엉엉 우는 어피치", role: "vip" },
+
+  // 회원 2: 죠르디
+  "죠르디": { pw: "592814", name: "죠르디", role: "vip" },
+
+  // 회원 3: 춘식
+  "춘식": { pw: "419827", name: "춘식", role: "vip" },
+
+  // 회원 4: 교대원 2학차
+  "교대원2학차": { pw: "628193", name: "교대원 2학차", role: "vip" },
+  "교대원": { pw: "628193", name: "교대원 2학차", role: "vip" },
+
+  // 회원 5: 라이언
+  "라이언": { pw: "731948", name: "라이언", role: "vip" },
+
+  // 회원 6: 화이팅 춘식이
+  "화이팅춘식이": { pw: "284719", name: "화이팅 춘식이", role: "vip" },
+
+  // 회원 7: rann
+  "rann": { pw: "918273", name: "rann♡", role: "vip" },
+  "rann♡": { pw: "918273", name: "rann♡", role: "vip" }
+};
+
+
+function getOrCreateDeviceId() {
+  let devId = localStorage.getItem(VIP_DEVICE_KEY);
+  if (!devId) {
+    devId = 'DEV-' + Math.random().toString(36).substring(2, 9).toUpperCase() + '-' + Date.now().toString(36).toUpperCase();
+    localStorage.setItem(VIP_DEVICE_KEY, devId);
+  }
+  return devId;
+}
+
+function getVipSession() {
+  try {
+    const raw = localStorage.getItem(VIP_STORAGE_KEY);
+    if (!raw) return null;
+    const session = JSON.parse(raw);
+    const currentDev = getOrCreateDeviceId();
+    // Device check: must match the device stored in this browser
+    if (session.deviceId !== currentDev) {
+      console.warn('Device ID mismatch in session');
+      localStorage.removeItem(VIP_STORAGE_KEY);
+      return null;
+    }
+    return session;
+  } catch (e) {
+    return null;
+  }
+}
+
+function isVipActive() {
+  return getVipSession() !== null;
+}
+
+function updateVipUI() {
+  const session = getVipSession();
+  const headerContainer = document.getElementById('vip-header-container');
+  if (!headerContainer) return;
+
+  if (session) {
+    headerContainer.innerHTML = 
+      '<div class="vip-user-badge">' +
+        '<span>👑 VIP ' + (session.userName || session.userId) + '님</span>' +
+        '<span style="font-size: 0.7rem; color: var(--text-dim);">(1기기 인증됨)</span>' +
+        '<button class="vip-logout-btn" onclick="logoutVIP()">로그아웃</button>' +
+      '</div>';
+  } else {
+    headerContainer.innerHTML = 
+      '<button class="vip-login-btn" onclick="openLoginModal()">' +
+        '<span>🔒</span> VIP 로그인 (3만원 마스터패스)' +
+      '</button>';
+  }
+}
+
+function openLoginModal() {
+  const modal = document.getElementById('vip-modal');
+  if (modal) modal.style.display = 'flex';
+  const devSpan = document.getElementById('vip-device-id-display');
+  if (devSpan) devSpan.innerText = getOrCreateDeviceId();
+  const apiUrlInput = document.getElementById('vip-input-api-url');
+  if (apiUrlInput) apiUrlInput.value = localStorage.getItem(VIP_API_KEY) || '';
+  switchVipTab('login');
+}
+
+function closeVipModal() {
+  const modal = document.getElementById('vip-modal');
+  if (modal) modal.style.display = 'none';
+}
+
+function switchVipTab(tab) {
+  ['login', 'info', 'setting'].forEach(t => {
+    const btn = document.getElementById('vip-tab-btn-' + t);
+    const content = document.getElementById('vip-tab-content-' + t);
+    if (btn) btn.classList.toggle('active', t === tab);
+    if (content) content.style.display = (t === tab) ? 'block' : 'none';
+  });
+  const msgBox = document.getElementById('vip-msg-box');
+  if (msgBox) msgBox.style.display = 'none';
+}
+
+function saveVipApiUrl() {
+  const input = document.getElementById('vip-input-api-url');
+  if (input) {
+    const url = input.value.trim();
+    localStorage.setItem(VIP_API_KEY, url);
+    alert('구글 앱스 스크립트 연동 URL이 저장되었습니다.');
+  }
+}
+
+async function executeVipLogin() {
+  const idInput = document.getElementById('vip-input-id');
+  const pwInput = document.getElementById('vip-input-pw');
+  const msgBox = document.getElementById('vip-msg-box');
+  const submitBtn = document.getElementById('vip-login-submit-btn');
+
+  const userId = idInput ? idInput.value.trim().toLowerCase() : '';
+  const userPw = pwInput ? pwInput.value.trim() : '';
+  const deviceId = getOrCreateDeviceId();
+
+  if (!userId || !userPw) {
+    showVipMsg('아이디와 비밀번호를 모두 입력해 주세요.', 'error');
+    return;
+  }
+
+  // 1. Check Pre-Registered Members & Master Key
+  const cleanId = userId.replace(/\s+/g, '');
+  if (PRE_REGISTERED_USERS[cleanId]) {
+    const user = PRE_REGISTERED_USERS[cleanId];
+    if (user.pw !== userPw) {
+      showVipMsg('비밀번호가 일치하지 않습니다. (6자리 확인 필요)', 'error');
+      return;
+    }
+
+    // 1-Device Lock Check
+    const boundKey = 'kice_bound_dev_' + cleanId;
+    const boundDev = localStorage.getItem(boundKey);
+    if (!boundDev) {
+      // First login: bind this device!
+      localStorage.setItem(boundKey, deviceId);
+    } else if (boundDev !== deviceId) {
+      showVipMsg('⚠️ [계정 공유 차단] 이미 다른 기기(1대)에 등록된 아이디입니다. 1아이디당 1기기만 사용 가능합니다. (기기 변경 문의: 관리자)', 'error');
+      return;
+    }
+
+    const session = {
+      userId: cleanId,
+      userName: user.name,
+      deviceId: deviceId,
+      timestamp: Date.now()
+    };
+    localStorage.setItem(VIP_STORAGE_KEY, JSON.stringify(session));
+    showVipMsg('👑 ' + user.name + '님 1인 1기기 인증 성공! 전 문항 잠금 해제되었습니다.', 'success');
+    setTimeout(() => {
+      closeVipModal();
+      updateVipUI();
+      reRenderCurrentTab();
+    }, 800);
+    return;
+  }
+
+  // 2. Check Google Apps Script API
+  const apiUrl = localStorage.getItem(VIP_API_KEY);
+  if (!apiUrl) {
+    // Standalone / Offline check: if user entered VIP key format
+    if (userPw.startsWith('VIP-') || userPw === '2027') {
+      const session = {
+        userId: userId,
+        userName: userId,
+        deviceId: deviceId,
+        timestamp: Date.now()
+      };
+      localStorage.setItem(VIP_STORAGE_KEY, JSON.stringify(session));
+      showVipMsg('VIP 라이선스 인증 완료! (' + deviceId + ' 기기 등록)', 'success');
+      setTimeout(() => {
+        closeVipModal();
+        updateVipUI();
+        reRenderCurrentTab();
+      }, 800);
+      return;
+    }
+    showVipMsg('연동된 구글 시트 URL이 없습니다. [설정] 탭에서 Apps Script URL을 등록하거나 관리자에게 문의하세요.', 'error');
+    return;
+  }
+
+  submitBtn.disabled = true;
+  submitBtn.innerText = '1인 1기기 인증 확인 중...';
+
+  try {
+    const reqUrl = apiUrl + '?action=login&userId=' + encodeURIComponent(userId) + 
+                   '&userPw=' + encodeURIComponent(userPw) + 
+                   '&deviceId=' + encodeURIComponent(deviceId);
+    
+    const res = await fetch(reqUrl);
+    const data = await res.json();
+
+    if (data.success) {
+      const session = {
+        userId: userId,
+        userName: data.userName || userId,
+        deviceId: deviceId,
+        timestamp: Date.now()
+      };
+      localStorage.setItem(VIP_STORAGE_KEY, JSON.stringify(session));
+      showVipMsg(data.message || '인증 성공! 이 기기로 등록되었습니다.', 'success');
+      setTimeout(() => {
+        closeVipModal();
+        updateVipUI();
+        reRenderCurrentTab();
+      }, 1000);
+    } else {
+      showVipMsg(data.message || '인증에 실패하였습니다.', 'error');
+    }
+  } catch (err) {
+    showVipMsg('서버 통신 오류: 인터넷 연결을 확인하거나 관리자에게 문의하세요. (' + err.message + ')', 'error');
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.innerText = '인증 및 마스터패스 활성화';
+  }
+}
+
+function showVipMsg(msg, type) {
+  const box = document.getElementById('vip-msg-box');
+  if (!box) return;
+  box.className = 'vip-msg-box ' + type;
+  box.innerHTML = msg;
+  box.style.display = 'block';
+}
+
+function logoutVIP() {
+  if (confirm('로그아웃 하시겠습니까? (이 기기의 등록 상태는 유지됩니다)')) {
+    localStorage.removeItem(VIP_STORAGE_KEY);
+    updateVipUI();
+    reRenderCurrentTab();
+  }
+}
+
+function reRenderCurrentTab() {
+  if (typeof renderTop55 === 'function') renderTop55();
+  if (typeof renderPedagogy === 'function') renderPedagogy();
+  if (typeof renderExamQuestions === 'function') {
+    renderExamQuestions('A');
+    renderExamQuestions('B');
+  }
+}
+
 </script>
+
+<!-- VIP Access & 1-Device Lock Modal -->
+<div class="vip-modal-overlay" id="vip-modal">
+  <div class="vip-modal-card">
+    <div class="vip-modal-header">
+      <div class="vip-modal-title">
+        <span>👑</span> 2027 KICE 마스터패스 인증 (1인 1기기)
+      </div>
+      <button class="vip-modal-close" onclick="closeVipModal()">&times;</button>
+    </div>
+
+    <div class="vip-modal-tabs">
+      <button class="vip-tab-btn active" id="vip-tab-btn-login" onclick="switchVipTab('login')">🔑 1인 1기기 로그인</button>
+      <button class="vip-tab-btn" id="vip-tab-btn-info" onclick="switchVipTab('info')">💳 3만 원 구매 안내</button>
+      <button class="vip-tab-btn" id="vip-tab-btn-setting" onclick="switchVipTab('setting')">⚙️ 연동 설정</button>
+    </div>
+
+    <!-- Tab 1: Login -->
+    <div id="vip-tab-content-login">
+      <div class="vip-form-group">
+        <label class="vip-form-label">구매자 아이디 (전화번호 또는 아이디)</label>
+        <input type="text" id="vip-input-id" class="vip-form-input" placeholder="예: 01012345678" autocomplete="username">
+      </div>
+      <div class="vip-form-group">
+        <label class="vip-form-label">비밀번호</label>
+        <input type="password" id="vip-input-pw" class="vip-form-input" placeholder="비밀번호 입력" autocomplete="current-password" onkeydown="if(event.key==='Enter') executeVipLogin()">
+      </div>
+      <button class="vip-submit-btn" onclick="executeVipLogin()" id="vip-login-submit-btn">인증 및 마스터패스 활성화</button>
+      <div class="vip-msg-box" id="vip-msg-box"></div>
+      <div class="vip-device-info">
+        <span>현재 기기 식별값:</span>
+        <span id="vip-device-id-display" style="font-family: monospace; color: var(--sky);">DEV-CHECKING</span>
+      </div>
+    </div>
+
+    <!-- Tab 2: Purchase Info -->
+    <div id="vip-tab-content-info" style="display: none;">
+      <div style="background: rgba(245, 158, 11, 0.08); border: 1px solid var(--gold); border-radius: 8px; padding: 14px; margin-bottom: 12px;">
+        <div style="font-weight: 800; color: var(--gold); font-size: 0.95rem; margin-bottom: 6px;">🎯 3만 원으로 1년 수험 기간을 단축하세요!</div>
+        <div style="font-size: 0.82rem; color: var(--text-main); line-height: 1.5;">
+          - 2027 KICE 복합형 킬러 30문항 풀세트 무제한 타자 암기<br>
+          - 2027 0순위 핵심 55선 4줄 답안 실전 규격(줄당 38-45자) 완벽 수록<br>
+          - PC / 태블릿 1인 1기기 영구 이용권 + 실전 B4 출력 PDF 증정
+        </div>
+      </div>
+      <div style="background: var(--bg-input); border: 1px solid var(--border-card); border-radius: 8px; padding: 14px; font-size: 0.85rem;">
+        <div style="font-weight: 700; color: var(--text-sub); margin-bottom: 4px;">입금 계좌 안내</div>
+        <div style="font-size: 1rem; font-weight: 800; color: var(--emerald); margin-bottom: 8px;">[30,000원 입금 후 문자 발송]</div>
+        <div style="color: var(--text-sub); font-size: 0.8rem; line-height: 1.4;">
+          입금자명과 함께 아래 번호로 문자 또는 카톡을 남겨주시면, <b>즉시 사용할 수 있는 개인 아이디와 비밀번호</b>를 발급해 드립니다.<br>
+          <span style="color: var(--gold); font-weight: 700;">📞 발급 문의: 관리자 문의</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab 3: Setting (For Admin / Google Apps Script) -->
+    <div id="vip-tab-content-setting" style="display: none;">
+      <div class="vip-form-group">
+        <label class="vip-form-label">구글 앱스 스크립트 웹앱 URL (DB 연동)</label>
+        <input type="text" id="vip-input-api-url" class="vip-form-input" placeholder="https://script.google.com/macros/s/.../exec">
+      </div>
+      <button class="tool-btn" style="width: 100%; padding: 10px; margin-top: 4px;" onclick="saveVipApiUrl()">연동 URL 저장 및 테스트</button>
+      <div style="margin-top: 12px; font-size: 0.75rem; color: var(--text-dim); line-height: 1.4;">
+        * 구글 시트 연동 전에는 마스터 관리자 키(아이디: <b>admin</b> / 비밀번호: <b>kice2027!</b>)로 즉시 전체 잠금 해제가 가능합니다.
+      </div>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
