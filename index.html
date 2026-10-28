@@ -2553,16 +2553,17 @@ window.addEventListener('afterprint', () => {
 const VIP_STORAGE_KEY = 'kice_2027_vip_session';
 const VIP_DEVICE_KEY = 'kice_2027_vip_dev_id';
 const VIP_API_KEY = 'kice_2027_vip_api_url';
-const DEFAULT_MASTER_ID = 'admin';
-const DEFAULT_MASTER_PW = 'kice2027!';
+const DEFAULT_MASTER_ID = 'cntfed';
+const DEFAULT_MASTER_PW = 'cntfed';
 
 // ==========================================
 // 카카오톡 스터디 사전 등록 회원 명단 (1인 1기기)
 // ==========================================
 const PRE_REGISTERED_USERS = {
   // 관리자 (천개의문 선생님)
-  "천개의문": { pw: "271128", name: "천개의문(선생님)", role: "admin" },
-  "admin": { pw: "271128", name: "천개의문(선생님)", role: "admin" },
+  "cntfed": { pw: "cntfed", name: "천개의문(관리자)", role: "admin" },
+  "천개의문": { pw: "cntfed", name: "천개의문(관리자)", role: "admin" },
+  "admin": { pw: "cntfed", name: "천개의문(관리자)", role: "admin" },
 
   // 회원 1: 엉엉 우는 어피치
   "엉엉우는어피치": { pw: "381924", name: "엉엉 우는 어피치", role: "vip" },
@@ -2876,7 +2877,7 @@ function reRenderCurrentTab() {
       </div>
       <button class="tool-btn" style="width: 100%; padding: 10px; margin-top: 4px;" onclick="saveVipApiUrl()">연동 URL 저장 및 테스트</button>
       <div style="margin-top: 12px; font-size: 0.75rem; color: var(--text-dim); line-height: 1.4;">
-        * 구글 시트 연동 전에는 마스터 관리자 키(아이디: <b>admin</b> / 비밀번호: <b>kice2027!</b>)로 즉시 전체 잠금 해제가 가능합니다.
+        * 구글 시트 연동 전에는 마스터 관리자 키(아이디: <b>cntfed</b> / 비밀번호: <b>cntfed</b>)로 즉시 전체 잠금 해제가 가능합니다.
       </div>
     </div>
   </div>
