@@ -2492,6 +2492,12 @@ function exportAnswers() {
 
 // Print Functions
 function openPrintModal() {
+  if (!isVipActive()) {
+    if (!confirm('무료 체험 문항만 인쇄됩니다. 30문항 전체 인쇄 및 PDF 저장은 VIP 마스터패스가 필요합니다. 계속 인쇄하시겠습니까?')) {
+      openLoginModal();
+      return;
+    }
+  }
   const modal = document.getElementById('print-modal');
   if (modal) modal.classList.add('active');
 }
@@ -2651,6 +2657,22 @@ function openLoginModal() {
   if (apiUrlInput) apiUrlInput.value = localStorage.getItem(VIP_API_KEY) || '';
   switchVipTab('login');
 }
+
+
+// Modal keyboard & click-outside listeners
+window.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    closeVipModal();
+    if (typeof closePrintModal === 'function') closePrintModal();
+  }
+});
+
+window.addEventListener('click', (e) => {
+  const vipModal = document.getElementById('vip-modal');
+  if (e.target === vipModal) closeVipModal();
+  const printModal = document.getElementById('print-modal');
+  if (e.target === printModal && typeof closePrintModal === 'function') closePrintModal();
+});
 
 function closeVipModal() {
   const modal = document.getElementById('vip-modal');
@@ -2879,7 +2901,7 @@ function reRenderCurrentTab() {
     <div id="vip-tab-content-login">
       <div class="vip-form-group">
         <label class="vip-form-label">구매자 아이디 (전화번호 또는 아이디)</label>
-        <input type="text" id="vip-input-id" class="vip-form-input" placeholder="예: 01012345678" autocomplete="username">
+        <input type="text" id="vip-input-id" class="vip-form-input" placeholder="예: 01012345678" autocomplete="username" onkeydown="if(event.key==='Enter') document.getElementById('vip-input-pw').focus()">
       </div>
       <div class="vip-form-group">
         <label class="vip-form-label">비밀번호</label>
