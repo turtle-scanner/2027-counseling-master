@@ -2768,6 +2768,7 @@ function updateVipUI() {
       '<div class="vip-user-badge">' +
         '<span>👑 VIP ' + (session.userName || session.userId) + '님</span>' +
         '<span style="font-size: 0.7rem; color: var(--text-dim);">(1기기 인증됨)</span>' +
+        '<button class="vip-logout-btn" onclick="openChangePwModal()" style="background:#1e293b; color:#38bdf8; border:1px solid #38bdf8; margin-left:4px; margin-right:4px;">🔑 암호변경</button>' +
         '<button class="vip-logout-btn" onclick="logoutVIP()">로그아웃</button>' +
       '</div>';
   } else {
@@ -2810,7 +2811,7 @@ function closeVipModal() {
 }
 
 function switchVipTab(tab) {
-  ['login', 'info', 'setting'].forEach(t => {
+  ['login', 'info', 'setting', 'change-pw'].forEach(t => {
     const btn = document.getElementById('vip-tab-btn-' + t);
     const content = document.getElementById('vip-tab-content-' + t);
     if (btn) btn.classList.toggle('active', t === tab);
@@ -2827,6 +2828,117 @@ function saveVipApiUrl() {
     localStorage.setItem(VIP_API_KEY, url);
     alert('구글 앱스 스크립트 연동 URL이 저장되었습니다.');
   }
+}
+
+
+function openChangePwModal() {
+  openLoginModal();
+  switchVipTab('change-pw');
+  const session = getVipSession();
+  if (session && session.userId) {
+    const idEl = document.getElementById('vip-pw-change-id');
+    if (idEl) idEl.value = session.userId;
+  }
+}
+
+async function executeChangeUserPassword() {
+  const idEl = document.getElementById('vip-pw-change-id');
+  const curEl = document.getElementById('vip-pw-change-current');
+  const newEl = document.getElementById('vip-pw-change-new');
+  const confEl = document.getElementById('vip-pw-change-confirm');
+  const msgEl = document.getElementById('vip-pw-change-msg');
+
+  const userId = idEl ? idEl.value.trim().toLowerCase().replace(/\s+/g, '') : '';
+  const curPw = curEl ? curEl.value.trim() : '';
+  const newPw = newEl ? newEl.value.trim() : '';
+  const confPw = confEl ? confEl.value.trim() : '';
+
+  if (!userId || !curPw || !newPw || !confPw) {
+    if (msgEl) {
+      msgEl.style.display = 'block';
+      msgEl.style.background = '#451a1a';
+      msgEl.style.color = '#fca5a5';
+      msgEl.innerText = '모든 입력란을 작성해 주세요.';
+    }
+    return;
+  }
+
+  // 1. Check user existence
+  const user = PRE_REGISTERED_USERS[userId];
+  if (!user) {
+    if (msgEl) {
+      msgEl.style.display = 'block';
+      msgEl.style.background = '#451a1a';
+      msgEl.style.color = '#fca5a5';
+      msgEl.innerText = '등록되지 않은 아이디입니다. 아이디를 확인해 주세요.';
+    }
+    return;
+  }
+
+  // 2. Check current password
+  const customPw = localStorage.getItem('kice_custom_pw_' + userId);
+  const currentExpectedPw = customPw || user.pw;
+  if (curPw !== currentExpectedPw) {
+    if (msgEl) {
+      msgEl.style.display = 'block';
+      msgEl.style.background = '#451a1a';
+      msgEl.style.color = '#fca5a5';
+      msgEl.innerText = '현재 비밀번호가 일치하지 않습니다.';
+    }
+    return;
+  }
+
+  // 3. Check new password match and length
+  if (newPw.length < 4) {
+    if (msgEl) {
+      msgEl.style.display = 'block';
+      msgEl.style.background = '#451a1a';
+      msgEl.style.color = '#fca5a5';
+      msgEl.innerText = '새 비밀번호는 최소 4자리 이상이어야 합니다.';
+    }
+    return;
+  }
+
+  if (newPw !== confPw) {
+    if (msgEl) {
+      msgEl.style.display = 'block';
+      msgEl.style.background = '#451a1a';
+      msgEl.style.color = '#fca5a5';
+      msgEl.innerText = '새 비밀번호와 확인 비밀번호가 서로 일치하지 않습니다.';
+    }
+    return;
+  }
+
+  // 4. Save new password locally
+  localStorage.setItem('kice_custom_pw_' + userId, newPw);
+
+  // 5. Cloud Firestore patch backup
+  try {
+    const patchUrl = 'https://firestore.googleapis.com/v1/projects/kice-study-29a5c/databases/(default)/documents/bound_devices/' + encodeURIComponent(userId) + '?updateMask.fieldPaths=customPw';
+    await fetch(patchUrl, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ fields: { customPw: { stringValue: newPw } } })
+    });
+  } catch(e) {
+    console.warn('Firestore password patch fallback:', e);
+  }
+
+  if (msgEl) {
+    msgEl.style.display = 'block';
+    msgEl.style.background = '#064e3b';
+    msgEl.style.color = '#a7f3d0';
+    msgEl.innerText = '✅ 비밀번호가 성공적으로 변경되었습니다!';
+  }
+
+  alert('🎉 ' + (user.name || userId) + '님의 비밀번호가 성공적으로 변경되었습니다!\n다음 접속부터 새 비밀번호(' + newPw + ')로 로그인해 주세요.');
+  
+  if (curEl) curEl.value = '';
+  if (newEl) newEl.value = '';
+  if (confEl) confEl.value = '';
+  switchVipTab('login');
+  const loginPwEl = document.getElementById('vip-input-pw');
+  if (loginPwEl) loginPwEl.value = newPw;
 }
 
 async function executeVipLogin() {
@@ -2848,8 +2960,10 @@ async function executeVipLogin() {
   const cleanId = userId.replace(/\s+/g, '');
   if (PRE_REGISTERED_USERS[cleanId]) {
     const user = PRE_REGISTERED_USERS[cleanId];
-    if (user.pw !== userPw) {
-      showVipMsg('비밀번호가 일치하지 않습니다. (6자리 확인 필요)', 'error');
+    const customPw = localStorage.getItem('kice_custom_pw_' + cleanId);
+    const expectedPw = customPw || user.pw;
+    if (expectedPw !== userPw) {
+      showVipMsg('비밀번호가 일치하지 않습니다.', 'error');
       return;
     }
 
@@ -3041,6 +3155,7 @@ async function executeAdminDeviceReset() {
 
     <div class="vip-modal-tabs">
       <button class="vip-tab-btn active" id="vip-tab-btn-login" onclick="switchVipTab('login')">🔑 1인 1기기 로그인</button>
+      <button class="vip-tab-btn" id="vip-tab-btn-change-pw" onclick="switchVipTab('change-pw')">🔒 암호 변경</button>
       <button class="vip-tab-btn" id="vip-tab-btn-info" onclick="switchVipTab('info')">💳 3만 원 구매 안내</button>
       <button class="vip-tab-btn" id="vip-tab-btn-setting" onclick="switchVipTab('setting')">⚙️ 연동 설정</button>
     </div>
@@ -3067,6 +3182,32 @@ async function executeAdminDeviceReset() {
         <span>현재 기기 식별값:</span>
         <span id="vip-device-id-display" style="font-family: monospace; color: var(--sky);">DEV-CHECKING</span>
       </div>
+    </div>
+
+    <!-- Tab: Change Password -->
+    <div id="vip-tab-content-change-pw" style="display: none;">
+      <div style="background: rgba(56, 189, 248, 0.08); border: 1px solid var(--sky); border-radius: 8px; padding: 12px; margin-bottom: 14px; font-size: 0.82rem; color: #e2e8f0;">
+        🔒 <b>수험생 비밀번호 직접 변경</b><br>
+        본인의 아이디와 현재 비밀번호를 입력하신 후, 새로 사용할 비밀번호를 저장해 주세요. 변경 즉시 새 비밀번호로 접속하실 수 있습니다.
+      </div>
+      <div class="vip-form-group">
+        <label class="vip-form-label">아이디 (닉네임)</label>
+        <input type="text" id="vip-pw-change-id" class="vip-form-input" placeholder="예: open 또는 열린생각" autocomplete="username">
+      </div>
+      <div class="vip-form-group">
+        <label class="vip-form-label">현재 비밀번호</label>
+        <input type="password" id="vip-pw-change-current" class="vip-form-input" placeholder="현재 비밀번호 (예: 000011)" autocomplete="current-password">
+      </div>
+      <div class="vip-form-group">
+        <label class="vip-form-label">새 비밀번호 (4자리 이상)</label>
+        <input type="password" id="vip-pw-change-new" class="vip-form-input" placeholder="새로 사용할 비밀번호" autocomplete="new-password">
+      </div>
+      <div class="vip-form-group">
+        <label class="vip-form-label">새 비밀번호 확인</label>
+        <input type="password" id="vip-pw-change-confirm" class="vip-form-input" placeholder="새 비밀번호 다시 입력" autocomplete="new-password">
+      </div>
+      <button class="vip-submit-btn" onclick="executeChangeUserPassword()" style="background:linear-gradient(135deg, #38bdf8, #0284c7); color:#000; font-weight:800;">새 비밀번호로 변경 완료</button>
+      <div id="vip-pw-change-msg" style="margin-top:10px; display:none; padding:10px; border-radius:6px; font-size:0.82rem;"></div>
     </div>
 
     <!-- Tab 2: Purchase Info -->
